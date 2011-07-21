@@ -1,0 +1,12 @@
+import org.ccci.idm.obj.SsoUser
+import org.ccci.idm.obj.RoleAssignment
+import org.ccci.soa.obj.USEmployment
+
+rule "RemoveAllWhenTerminated"
+    dialect "mvel"
+    when
+        USEmployment( emplStatus != "A" )
+        r : RoleAssignment( )
+    then
+        retract( r );
+end
