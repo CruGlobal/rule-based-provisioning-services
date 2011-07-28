@@ -2,17 +2,13 @@ package org.ccci.idm.rules.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import java.util.List;
 
 import org.ccci.idm.obj.RoleAssignment;
-import org.ccci.soa.obj.USEmployment;
-
 import org.ccci.idm.util.Util;
-
+import org.ccci.soa.obj.USEmployment;
 import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseFactory;
-import org.drools.ObjectFilter;
 import org.drools.builder.DecisionTableConfiguration;
 import org.drools.builder.DecisionTableInputType;
 import org.drools.builder.KnowledgeBuilder;
@@ -23,7 +19,7 @@ import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.rule.FactHandle;
 
-public abstract class RuleBasedProvisioningService
+public abstract class RuleBasedResponsibilityProvisioningService
 {
     protected String roleBasePath;
     protected String attestorId;
@@ -32,7 +28,7 @@ public abstract class RuleBasedProvisioningService
     protected KnowledgeBase kbase;
     
 
-    public RuleBasedProvisioningService(String attestorId, String roleBasePath, boolean convertRoleNames)
+    public RuleBasedResponsibilityProvisioningService(String attestorId, String roleBasePath, boolean convertRoleNames)
     {
         super();
         this.attestorId = attestorId;

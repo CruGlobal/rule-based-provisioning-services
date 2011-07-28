@@ -1,10 +1,8 @@
 package org.ccci.idm.rules.test;
 
-import org.ccci.idm.rules.services.RuleBasedProvisioningService;
-import org.ccci.idm.rules.services.RuleBasedProvisioningServiceGrouper;
-import org.ccci.idm.rules.webservice.RuleBasedProvisioning;
+import org.ccci.idm.rules.services.RuleBasedResponsibilityProvisioningService;
+import org.ccci.idm.rules.services.RuleBasedResponsibilityProvisioningServiceGrouper;
 import org.ccci.soa.obj.USEmployment;
-
 import org.junit.Test;
 
 public class ComputeSiebelResponsibilitiesDemo
@@ -17,7 +15,7 @@ public class ComputeSiebelResponsibilitiesDemo
     @Test
     public void basicDemo() throws Exception
     {
-      RuleBasedProvisioningService svc = new RuleBasedProvisioningServiceGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel_resp", true);
+      RuleBasedResponsibilityProvisioningService svc = new RuleBasedResponsibilityProvisioningServiceGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel_resp", true);
       svc.addExcelRuleset("SiebelProvisioningRules.xls", "Sheet1");
       USEmployment e = new USEmployment();
       

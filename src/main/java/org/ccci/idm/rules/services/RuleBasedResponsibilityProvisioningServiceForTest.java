@@ -2,14 +2,10 @@ package org.ccci.idm.rules.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
-import org.ccci.idm.grouper.dao.GrouperDao;
-import org.ccci.idm.grouper.dao.GrouperDaoImpl;
-import org.ccci.idm.grouper.obj.GrouperMembership;
 import org.ccci.idm.obj.RoleAssignment;
 
-public class RuleBasedProvisioningServiceForTest extends RuleBasedProvisioningService
+public class RuleBasedResponsibilityProvisioningServiceForTest extends RuleBasedResponsibilityProvisioningService
 {
     Collection<RoleAssignment> addedRoles = new ArrayList<RoleAssignment>();
     Collection<RoleAssignment> removedRoles = new ArrayList<RoleAssignment>();
@@ -29,7 +25,7 @@ public class RuleBasedProvisioningServiceForTest extends RuleBasedProvisioningSe
         }
     }
     
-    public RuleBasedProvisioningServiceForTest(String attestorId, String roleBasePath, boolean convertRoleNames)
+    public RuleBasedResponsibilityProvisioningServiceForTest(String attestorId, String roleBasePath, boolean convertRoleNames)
     {
         super(attestorId, roleBasePath, convertRoleNames);
     }

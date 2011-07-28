@@ -3,17 +3,17 @@ package org.ccci.idm.rules.test;
 import java.util.Collection;
 
 import org.ccci.idm.obj.RoleAssignment;
-import org.ccci.idm.rules.services.RuleBasedProvisioningService;
-import org.ccci.idm.rules.services.RuleBasedProvisioningServiceForTest;
-import org.ccci.idm.rules.services.RuleBasedProvisioningServiceGrouper;
+import org.ccci.idm.rules.services.RuleBasedResponsibilityProvisioningService;
+import org.ccci.idm.rules.services.RuleBasedResponsibilityProvisioningServiceForTest;
+import org.ccci.idm.rules.services.RuleBasedResponsibilityProvisioningServiceGrouper;
 import org.ccci.soa.obj.USEmployment;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-public class RuleBasedProvisioningServiceTest
+public class RuleBasedResponsibilityProvisioningServiceTest
 {
-    public RuleBasedProvisioningServiceTest()
+    public RuleBasedResponsibilityProvisioningServiceTest()
     {
         super();
     }
@@ -21,7 +21,7 @@ public class RuleBasedProvisioningServiceTest
     @Test
     public void basicDemo() throws Exception
     {
-        RuleBasedProvisioningServiceForTest svc = new RuleBasedProvisioningServiceForTest("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel_resp", true);
+        RuleBasedResponsibilityProvisioningServiceForTest svc = new RuleBasedResponsibilityProvisioningServiceForTest("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel_resp", true);
         svc.addExcelRuleset("classpath:Test1Rules.xls", "Sheet1");
         svc.addDrlRuleset("classpath:RemoveAllRoles.drl");
         

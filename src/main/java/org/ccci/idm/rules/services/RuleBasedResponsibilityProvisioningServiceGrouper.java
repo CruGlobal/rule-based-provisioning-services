@@ -9,9 +9,9 @@ import org.ccci.idm.grouper.dao.GrouperDaoImpl;
 import org.ccci.idm.grouper.obj.GrouperMembership;
 import org.ccci.idm.obj.RoleAssignment;
 
-public class RuleBasedProvisioningServiceGrouper extends RuleBasedProvisioningService
+public class RuleBasedResponsibilityProvisioningServiceGrouper extends RuleBasedResponsibilityProvisioningService
 {
-    public RuleBasedProvisioningServiceGrouper(String attestorId, String roleBasePath, boolean convertRoleNames)
+    public RuleBasedResponsibilityProvisioningServiceGrouper(String attestorId, String roleBasePath, boolean convertRoleNames)
     {
         super(attestorId, roleBasePath, convertRoleNames);
     }
