@@ -20,7 +20,7 @@ public class RuleBasedResponsibilityProvisioning
     {
         super();
         svc = new RuleBasedResponsibilityProvisioningServiceGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel_resp", true);
-        svc.addExcelRuleset("classpath:SiebelProvisioningRules.xls", "Sheet1");
+        svc.addExcelRuleset("classpath:SiebelResponsibilityProvisioningRules.xls", "Sheet1");
         svc.addDrlRuleset("classpath:RemoveAllRoles.drl");
     }
 

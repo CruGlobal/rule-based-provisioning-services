@@ -16,7 +16,7 @@ public class ComputeSiebelResponsibilitiesDemo
     public void basicDemo() throws Exception
     {
       RuleBasedResponsibilityProvisioningService svc = new RuleBasedResponsibilityProvisioningServiceGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel_resp", true);
-      svc.addExcelRuleset("SiebelProvisioningRules.xls", "Sheet1");
+      svc.addExcelRuleset("SiebelResponsibilitiesProvisioningRules.xls", "Sheet1");
       USEmployment e = new USEmployment();
       
       e.setCompany("CCC");
