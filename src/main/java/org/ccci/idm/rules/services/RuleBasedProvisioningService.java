@@ -19,7 +19,7 @@ import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.rule.FactHandle;
 
-public abstract class RuleBasedResponsibilityProvisioningService
+public abstract class RuleBasedProvisioningService
 {
     protected String roleBasePath;
     protected String attestorId;
@@ -28,7 +28,7 @@ public abstract class RuleBasedResponsibilityProvisioningService
     protected KnowledgeBase kbase;
     
 
-    public RuleBasedResponsibilityProvisioningService(String attestorId, String roleBasePath, boolean convertRoleNames)
+    public RuleBasedProvisioningService(String attestorId, String roleBasePath, boolean convertRoleNames)
     {
         super();
         this.attestorId = attestorId;
@@ -61,7 +61,7 @@ public abstract class RuleBasedResponsibilityProvisioningService
     
         if (kbuilder.hasErrors())
         {
-            throw new RuntimeException("Ruleset SiebelResponsibilityProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
+            throw new RuntimeException("Ruleset SiebelProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
         }
     
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
@@ -90,7 +90,7 @@ public abstract class RuleBasedResponsibilityProvisioningService
     
         if (kbuilder.hasErrors())
         {
-            throw new RuntimeException("Ruleset SiebelResponsibilityProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
+            throw new RuntimeException("Ruleset SiebelProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
         }
     
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
@@ -107,7 +107,7 @@ public abstract class RuleBasedResponsibilityProvisioningService
     
         if (kbuilder.hasErrors())
         {
-            throw new RuntimeException("Ruleset SiebelResponsibilityProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
+            throw new RuntimeException("Ruleset SiebelProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
         }
     
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
@@ -131,7 +131,7 @@ public abstract class RuleBasedResponsibilityProvisioningService
   
         if (kbuilder.hasErrors())
         {
-            throw new RuntimeException("Ruleset SiebelResponsibilityProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
+            throw new RuntimeException("Ruleset SiebelProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
         }
   
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());

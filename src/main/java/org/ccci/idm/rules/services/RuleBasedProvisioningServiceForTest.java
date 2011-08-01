@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.ccci.idm.obj.RoleAssignment;
 
-public class RuleBasedResponsibilityProvisioningServiceForTest extends RuleBasedResponsibilityProvisioningService
+public class RuleBasedProvisioningServiceForTest extends RuleBasedProvisioningService
 {
     Collection<RoleAssignment> addedRoles = new ArrayList<RoleAssignment>();
     Collection<RoleAssignment> removedRoles = new ArrayList<RoleAssignment>();
@@ -25,7 +25,7 @@ public class RuleBasedResponsibilityProvisioningServiceForTest extends RuleBased
         }
     }
     
-    public RuleBasedResponsibilityProvisioningServiceForTest(String attestorId, String roleBasePath, boolean convertRoleNames)
+    public RuleBasedProvisioningServiceForTest(String attestorId, String roleBasePath, boolean convertRoleNames)
     {
         super(attestorId, roleBasePath, convertRoleNames);
     }

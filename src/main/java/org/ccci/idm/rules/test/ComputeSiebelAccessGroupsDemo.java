@@ -5,9 +5,9 @@ import org.ccci.idm.rules.services.RuleBasedProvisioningServiceGrouper;
 import org.ccci.soa.obj.USEmployment;
 import org.junit.Test;
 
-public class ComputeSiebelResponsibilitiesDemo
+public class ComputeSiebelAccessGroupsDemo
 {
-    public ComputeSiebelResponsibilitiesDemo()
+    public ComputeSiebelAccessGroupsDemo()
     {
         super();
     }
@@ -15,8 +15,8 @@ public class ComputeSiebelResponsibilitiesDemo
     @Test
     public void basicDemo() throws Exception
     {
-      RuleBasedProvisioningService svc = new RuleBasedProvisioningServiceGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel_resp", true);
-      svc.addExcelRuleset("SiebelResponsibilityProvisioningRules.xls", "Sheet1");
+      RuleBasedProvisioningService svc = new RuleBasedProvisioningServiceGrouper("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel_access_group", true);
+      svc.addExcelRuleset("SiebelAccessGroupProvisioningRules.xls", "Sheet1");
       USEmployment e = new USEmployment();
       
       e.setCompany("CCC");
