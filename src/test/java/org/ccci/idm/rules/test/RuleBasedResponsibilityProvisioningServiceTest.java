@@ -19,7 +19,7 @@ public class RuleBasedResponsibilityProvisioningServiceTest
     @Test
     public void basicDemo() throws Exception
     {
-        RuleBasedProvisioningServiceForTest svc = new RuleBasedProvisioningServiceForTest("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel_resp", true);
+        RuleBasedProvisioningServiceForTest svc = new RuleBasedProvisioningServiceForTest("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel:resp", true);
         svc.addExcelRuleset("classpath:Test1Rules.xls", "Sheet1");
         svc.addDrlRuleset("classpath:RemoveAllRoles.drl");
         
@@ -42,8 +42,8 @@ public class RuleBasedResponsibilityProvisioningServiceTest
         Assert.assertEquals(2, svc.getAddedRoles().size());
         Assert.assertEquals(0, svc.getRemovedRoles().size());
         
-        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel_resp:ccci_base_user","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
-        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel_resp:ccci_call_center_agent","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
+        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel:resp:ccci_base_user","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
+        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel:resp:ccci_call_center_agent","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
         
         // ==============================================================
         // change job code: should result in one role removed and one added
@@ -57,14 +57,14 @@ public class RuleBasedResponsibilityProvisioningServiceTest
         Assert.assertEquals(1, svc.getAddedRoles().size());
         Assert.assertEquals(1, svc.getRemovedRoles().size());
         
-        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel_resp:ccci_base_user","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
-        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel_resp:ccci_call_center_manager","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
+        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel:resp:ccci_base_user","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
+        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel:resp:ccci_call_center_manager","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
         
         // ==============================================================
         // The rules sould NOT remove a role attested by a different user
         svc.reset(false);
         
-        svc.getCurrentRoles().add(new RoleAssignment("ccci:itroles:uscore:siebel_resp:another","nathan.kopp@ccci.org","another.user@ccci.org",true));
+        svc.getCurrentRoles().add(new RoleAssignment("ccci:itroles:uscore:siebel:resp:another","nathan.kopp@ccci.org","another.user@ccci.org",true));
         
         svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", e);
         
@@ -72,9 +72,9 @@ public class RuleBasedResponsibilityProvisioningServiceTest
         Assert.assertEquals(0, svc.getAddedRoles().size());
         Assert.assertEquals(0, svc.getRemovedRoles().size());
       
-        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel_resp:ccci_base_user","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
-        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel_resp:ccci_call_center_manager","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
-        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel_resp:another","nathan.kopp@ccci.org","another.user@ccci.org",false)));
+        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel:resp:ccci_base_user","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
+        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel:resp:ccci_call_center_manager","nathan.kopp@ccci.org","siebel.responsibility.rules@ccci.org",false)));
+        Assert.assertTrue(containsRole(svc.getCurrentRoles(), new RoleAssignment("ccci:itroles:uscore:siebel:resp:another","nathan.kopp@ccci.org","another.user@ccci.org",false)));
     }
 
     private boolean containsRole(Collection<RoleAssignment> roles, RoleAssignment roleAssignment)

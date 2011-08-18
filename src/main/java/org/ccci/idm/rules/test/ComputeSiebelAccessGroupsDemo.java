@@ -15,7 +15,7 @@ public class ComputeSiebelAccessGroupsDemo
     @Test
     public void basicDemo() throws Exception
     {
-      RuleBasedProvisioningService svc = new RuleBasedProvisioningServiceGrouper("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel_access_group", true);
+      RuleBasedProvisioningService svc = new RuleBasedProvisioningServiceGrouper("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel:access_groups", true);
       svc.addExcelRuleset("SiebelAccessGroupProvisioningRules.xls", "Sheet1");
       USEmployment e = new USEmployment();
       

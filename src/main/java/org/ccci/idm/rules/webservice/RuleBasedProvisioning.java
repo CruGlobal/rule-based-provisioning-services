@@ -20,11 +20,11 @@ public class RuleBasedProvisioning
 	{
 		super();
 
-		ruleBasedResponsibilityProvisioningService = new RuleBasedProvisioningServiceGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel_resp", true);
+		ruleBasedResponsibilityProvisioningService = new RuleBasedProvisioningServiceGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel:resp", true);
 		ruleBasedResponsibilityProvisioningService.addExcelRuleset("classpath:SiebelResponsibilityProvisioningRules.xls", "Sheet1");
 		ruleBasedResponsibilityProvisioningService.addDrlRuleset("classpath:RemoveAllRoles.drl");
 
-		ruleBasedAccessGroupProvisioningService = new RuleBasedProvisioningServiceGrouper("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel_access_group", true);
+		ruleBasedAccessGroupProvisioningService = new RuleBasedProvisioningServiceGrouper("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel:access_groups", true);
 		ruleBasedAccessGroupProvisioningService.addExcelRuleset("classpath:SiebelAccessGroupProvisioningRules.xls", "Sheet1");
 		ruleBasedAccessGroupProvisioningService.addDrlRuleset("classpath:RemoveAllRoles.drl");
 	}
