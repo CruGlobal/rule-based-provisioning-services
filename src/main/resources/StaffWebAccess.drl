@@ -1,0 +1,20 @@
+import org.ccci.idm.obj.SsoUser
+import org.ccci.idm.obj.RoleAssignment
+import org.ccci.soa.obj.USEmployment
+
+rule "RemoveManuallyAssignedStaffWebConsumerWhenTerminated"
+    dialect "mvel"
+    when
+        USEmployment( emplStatus != "A" )
+        r : RoleAssignment( roleId="ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer" )
+    then
+        retract( r );
+end
+
+rule "EnableStaffWebConsumerWhenActive"
+    dialect "mvel"
+    when
+        USEmployment( emplStatus = "A" )
+    then
+        insert(new RoleAssignment("ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer"))
+end
