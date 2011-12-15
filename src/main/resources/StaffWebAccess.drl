@@ -1,20 +1,60 @@
 import org.ccci.idm.obj.SsoUser
 import org.ccci.idm.obj.RoleAssignment
 import org.ccci.soa.obj.USEmployment
+import java.util.Date
 
-rule "RemoveManuallyAssignedStaffWebConsumerWhenTerminated"
-    dialect "mvel"
+global java.util.Date now
+
+function Date addDaysToDates(Date termDate, int graceDays)
+{
+    Date termDatePlusGrace = new Date();
+    termDatePlusGrace.setTime(termDate.getTime()+graceDays*24L*60*60*1000);
+    return termDatePlusGrace;
+}
+
+declare ActiveGracePeriod
+	endDate : Date
+end
+
+rule "ActivateGracePeriodForStaff"
+	when
+		USEmployment( emplStatus != "A",
+					  paygroup in ("USS", "INT", "RCE", "SAL", "HFT", "HPT"),
+					  $endDate : addDaysToDates(termDateAsDate, 90)>=now)
+	then
+		insert(new ActiveGracePeriod($endDate));
+end
+
+rule "ActivateGracePeriodForInterns"
+	when
+		USEmployment( emplStatus != "A",
+					  paygroup not in ("USS", "INT", "RCE", "SAL", "HFT", "HPT"),
+					  $endDate : addDaysToDates(termDateAsDate, 30)>=now)
+	then
+		insert(new ActiveGracePeriod($endDate));
+end
+
+rule "EnableStaffWebConsumerWhenActive"
+    when
+        USEmployment( emplStatus == "A" )
+    then
+        insert(new RoleAssignment("ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer"));
+end
+
+rule "WithinGracePeriod"
     when
         USEmployment( emplStatus != "A" )
-        r : RoleAssignment( roleId="ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer" )
+        ActiveGracePeriod($endDate : endDate)
+    then
+        insert(new RoleAssignment("ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer", $endDate));
+end
+
+rule "RemoveManuallyAssignedStaffWebConsumer"
+    when
+        USEmployment( emplStatus != "A" )
+        not ActiveGracePeriod()
+        r : RoleAssignment( roleId=="ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer" )
     then
         retract( r );
 end
 
-rule "EnableStaffWebConsumerWhenActive"
-    dialect "mvel"
-    when
-        USEmployment( emplStatus = "A" )
-    then
-        insert(new RoleAssignment("ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer"))
-end

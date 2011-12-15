@@ -1,4 +1,4 @@
-package org.ccci.idm.rules.services;
+package org.ccci.idm.rules.processes;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,9 +9,9 @@ import org.ccci.idm.grouper.dao.GrouperDaoImpl;
 import org.ccci.idm.grouper.obj.GrouperMembership;
 import org.ccci.idm.obj.RoleAssignment;
 
-public class RuleBasedProvisioningServiceGrouper extends RuleBasedProvisioningService
+public class RuleBasedProvisioningProcessGrouper extends RuleBasedProvisioningProcess
 {
-    public RuleBasedProvisioningServiceGrouper(String attestorId, String roleBasePath, boolean convertRoleNames)
+    public RuleBasedProvisioningProcessGrouper(String attestorId, String roleBasePath, boolean convertRoleNames)
     {
         super(attestorId, roleBasePath, convertRoleNames);
     }
@@ -29,6 +29,7 @@ public class RuleBasedProvisioningServiceGrouper extends RuleBasedProvisioningSe
             r.setAttestorId(m.getAttester());
             r.setExisting(true);
             r.setRoleId(m.getGroup());
+            r.setExpiration(m.getExpiration());
             assignments.add(r);
         }
         return assignments;
@@ -41,6 +42,7 @@ public class RuleBasedProvisioningServiceGrouper extends RuleBasedProvisioningSe
         try
         {
             dao.addMember(r.getAssigneeId(), r.getRoleId());
+            dao.setExpiration(r.getAssigneeId(), r.getRoleId(), r.getExpiration());
         }
         finally
         {
@@ -66,5 +68,12 @@ public class RuleBasedProvisioningServiceGrouper extends RuleBasedProvisioningSe
     protected String convertRoleNameToId(String string)
     {
         return string.replace(" ", "_").toLowerCase();
+    }
+
+    @Override
+    protected void updateRoleExpiration(RoleAssignment r) throws Exception
+    {
+        // TODO Auto-generated method stub
+        
     }
 }

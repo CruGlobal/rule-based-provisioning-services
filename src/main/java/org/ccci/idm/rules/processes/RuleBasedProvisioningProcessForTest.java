@@ -1,11 +1,11 @@
-package org.ccci.idm.rules.services;
+package org.ccci.idm.rules.processes;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.ccci.idm.obj.RoleAssignment;
 
-public class RuleBasedProvisioningServiceForTest extends RuleBasedProvisioningService
+public class RuleBasedProvisioningProcessForTest extends RuleBasedProvisioningProcess
 {
     Collection<RoleAssignment> addedRoles = new ArrayList<RoleAssignment>();
     Collection<RoleAssignment> removedRoles = new ArrayList<RoleAssignment>();
@@ -25,7 +25,7 @@ public class RuleBasedProvisioningServiceForTest extends RuleBasedProvisioningSe
         }
     }
     
-    public RuleBasedProvisioningServiceForTest(String attestorId, String roleBasePath, boolean convertRoleNames)
+    public RuleBasedProvisioningProcessForTest(String attestorId, String roleBasePath, boolean convertRoleNames)
     {
         super(attestorId, roleBasePath, convertRoleNames);
     }
@@ -94,5 +94,12 @@ public class RuleBasedProvisioningServiceForTest extends RuleBasedProvisioningSe
     public Collection<RoleAssignment> getCurrentRoles()
     {
         return currentRoles;
+    }
+
+    @Override
+    protected void updateRoleExpiration(RoleAssignment r) throws Exception
+    {
+        removeRoleFromPerson(r);
+        assignRoleToPerson(r);
     }
 }

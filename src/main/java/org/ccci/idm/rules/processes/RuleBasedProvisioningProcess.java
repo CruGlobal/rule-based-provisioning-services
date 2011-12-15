@@ -1,7 +1,8 @@
-package org.ccci.idm.rules.services;
+package org.ccci.idm.rules.processes;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.ccci.idm.obj.RoleAssignment;
@@ -19,7 +20,7 @@ import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.rule.FactHandle;
 
-public abstract class RuleBasedProvisioningService
+public abstract class RuleBasedProvisioningProcess
 {
     protected String roleBasePath;
     protected String attestorId;
@@ -28,7 +29,7 @@ public abstract class RuleBasedProvisioningService
     protected KnowledgeBase kbase;
     
 
-    public RuleBasedProvisioningService(String attestorId, String roleBasePath, boolean convertRoleNames)
+    public RuleBasedProvisioningProcess(String attestorId, String roleBasePath, boolean convertRoleNames)
     {
         super();
         this.attestorId = attestorId;
@@ -137,11 +138,11 @@ public abstract class RuleBasedProvisioningService
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
     }
 
-    public String computeAndApplyRolesForEmployee(String ssoGuid, USEmployment employment) throws Exception
+    public String computeAndApplyRolesForEmployee(String ssoGuid, USEmployment employment, Date now) throws Exception
     {
         Collection<RoleAssignment> allExistingAssignments = findExistingAssignedRoles(ssoGuid);
         Collection<RoleAssignment> externalExistingAssignments = filterExistingRolesKeepExternal(allExistingAssignments);
-        Collection<RoleAssignment> newAssignments = computeNewRoleAssignments(employment, ssoGuid, externalExistingAssignments);
+        Collection<RoleAssignment> newAssignments = computeNewRoleAssignments(employment, ssoGuid, externalExistingAssignments, now);
         
         applyRoleAssignments(newAssignments, allExistingAssignments);
 
@@ -172,6 +173,10 @@ public abstract class RuleBasedProvisioningService
                 removeRoleFromPerson(newOne);
                 assignRoleToPerson(newOne);
             }
+            else if(!Util.equal(found.getExpiration(),newOne.getExpiration()))
+            {
+                updateRoleExpiration(newOne);
+            }
         }
 
         // remove any assignments that don't apply any more
@@ -187,14 +192,16 @@ public abstract class RuleBasedProvisioningService
                 }
             }
             if (!found)
+            {
                 removeRoleFromPerson(r2);
+            }
         }
     }
 
 
-    private List<RoleAssignment> computeNewRoleAssignments(USEmployment employment, String ssoGuid,  Collection<RoleAssignment> externalExistingAssignments)
+    private List<RoleAssignment> computeNewRoleAssignments(USEmployment employment, String ssoGuid,  Collection<RoleAssignment> externalExistingAssignments, Date now)
     {
-        StatefulKnowledgeSession ksession = setupRulesSession(employment, kbase, externalExistingAssignments);
+        StatefulKnowledgeSession ksession = setupRulesSession(employment, kbase, externalExistingAssignments, now);
 
         ksession.fireAllRules();
         
@@ -261,9 +268,11 @@ public abstract class RuleBasedProvisioningService
         }
     }
 
-    private StatefulKnowledgeSession setupRulesSession(USEmployment employment, KnowledgeBase kbase, Collection<RoleAssignment> externalExistingAssignments)
+    private StatefulKnowledgeSession setupRulesSession(USEmployment employment, KnowledgeBase kbase, Collection<RoleAssignment> externalExistingAssignments, Date now)
     {
         StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
+        
+        ksession.setGlobal("now", now);
 
         FactHandle employmentHandle = ksession.insert(employment);
         for (RoleAssignment role : externalExistingAssignments)
@@ -294,13 +303,14 @@ public abstract class RuleBasedProvisioningService
 
     private String convertRoleNameToFullPath(String name)
     {
-        if(roleBasePath==null) return convertRoleNames?convertRoleNameToId(name):name;
+        if(Util.isBlank(roleBasePath)) return convertRoleNames?convertRoleNameToId(name):name;
         else return roleBasePath+":"+(convertRoleNames?convertRoleNameToId(name):name);
     }
     
     protected abstract Collection<RoleAssignment> findExistingAssignedRoles(String globalId) throws Exception;
     protected abstract void assignRoleToPerson(RoleAssignment r) throws Exception;
     protected abstract void removeRoleFromPerson(RoleAssignment r) throws Exception;
+    protected abstract void updateRoleExpiration(RoleAssignment r) throws Exception;
     protected abstract String convertRoleNameToId(String string);
 
 }

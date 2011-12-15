@@ -1,7 +1,9 @@
 package org.ccci.idm.rules.test;
 
-import org.ccci.idm.rules.services.RuleBasedProvisioningService;
-import org.ccci.idm.rules.services.RuleBasedProvisioningServiceGrouper;
+import java.util.Date;
+
+import org.ccci.idm.rules.processes.RuleBasedProvisioningProcess;
+import org.ccci.idm.rules.processes.RuleBasedProvisioningProcessGrouper;
 import org.ccci.soa.obj.USEmployment;
 import org.junit.Test;
 
@@ -15,7 +17,7 @@ public class ComputeSiebelResponsibilitiesDemo
     @Test
     public void basicDemo() throws Exception
     {
-      RuleBasedProvisioningService svc = new RuleBasedProvisioningServiceGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel:resp", true);
+      RuleBasedProvisioningProcess svc = new RuleBasedProvisioningProcessGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel:resp", true);
       svc.addExcelRuleset("SiebelResponsibilityProvisioningRules.xls", "Sheet1");
       USEmployment e = new USEmployment();
       
@@ -27,6 +29,6 @@ public class ComputeSiebelResponsibilitiesDemo
       e.setEmplStatus("A");
       e.setJobCode("CT2");
       
-      svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org",e);
+      svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org",e, new Date());
     }
 }
