@@ -49,6 +49,8 @@ rule "WithinGracePeriod"
         insert(new RoleAssignment("ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer", $endDate));
 end
 
+/*
+This would remove manaully-asserted roles... so that wouldn't be good
 rule "RemoveManuallyAssignedStaffWebConsumer"
     when
         USEmployment( emplStatus != "A" )
@@ -57,4 +59,5 @@ rule "RemoveManuallyAssignedStaffWebConsumer"
     then
         retract( r );
 end
+*/
 
