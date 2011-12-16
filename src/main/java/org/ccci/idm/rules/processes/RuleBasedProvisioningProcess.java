@@ -138,11 +138,11 @@ public abstract class RuleBasedProvisioningProcess
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
     }
 
-    public String computeAndApplyRolesForEmployee(String ssoGuid, USEmployment employment, Date now) throws Exception
+    public String computeAndApplyRolesForEmployee(String ssoGuid, Date now, Object... facts) throws Exception
     {
         Collection<RoleAssignment> allExistingAssignments = findExistingAssignedRoles(ssoGuid);
         Collection<RoleAssignment> externalExistingAssignments = filterExistingRolesKeepExternal(allExistingAssignments);
-        Collection<RoleAssignment> newAssignments = computeNewRoleAssignments(employment, ssoGuid, externalExistingAssignments, now);
+        Collection<RoleAssignment> newAssignments = computeNewRoleAssignments(ssoGuid, externalExistingAssignments, now, facts);
         
         applyRoleAssignments(newAssignments, allExistingAssignments);
 
@@ -199,9 +199,9 @@ public abstract class RuleBasedProvisioningProcess
     }
 
 
-    private List<RoleAssignment> computeNewRoleAssignments(USEmployment employment, String ssoGuid,  Collection<RoleAssignment> externalExistingAssignments, Date now)
+    private List<RoleAssignment> computeNewRoleAssignments(String ssoGuid,  Collection<RoleAssignment> externalExistingAssignments, Date now, Object... facts)
     {
-        StatefulKnowledgeSession ksession = setupRulesSession(employment, kbase, externalExistingAssignments, now);
+        StatefulKnowledgeSession ksession = setupRulesSession(kbase, externalExistingAssignments, now, facts);
 
         ksession.fireAllRules();
         
@@ -268,13 +268,17 @@ public abstract class RuleBasedProvisioningProcess
         }
     }
 
-    private StatefulKnowledgeSession setupRulesSession(USEmployment employment, KnowledgeBase kbase, Collection<RoleAssignment> externalExistingAssignments, Date now)
+    private StatefulKnowledgeSession setupRulesSession(KnowledgeBase kbase, Collection<RoleAssignment> externalExistingAssignments, Date now, Object... facts)
     {
         StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
         
         ksession.setGlobal("now", now);
 
-        FactHandle employmentHandle = ksession.insert(employment);
+        for(Object fact : facts)
+        {
+            FactHandle employmentHandle = ksession.insert(fact);
+        }
+        
         for (RoleAssignment role : externalExistingAssignments)
         {
             FactHandle roleHandle = ksession.insert(role);

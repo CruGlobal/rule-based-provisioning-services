@@ -29,6 +29,6 @@ public class ComputeSiebelResponsibilitiesDemo
       e.setEmplStatus("A");
       e.setJobCode("CT2");
       
-      svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org",e, new Date());
+      svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", new Date(),e);
     }
 }

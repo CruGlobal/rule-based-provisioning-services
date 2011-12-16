@@ -38,7 +38,7 @@ public class RuleBasedResponsibilityProvisioningServiceTest
         e.setEmplStatus("A");
         e.setJobCode("CT2");
 
-        svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", e, now);
+        svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
         
         Assert.assertEquals(2, svc.getCurrentRoles().size());
         Assert.assertEquals(2, svc.getAddedRoles().size());
@@ -53,7 +53,7 @@ public class RuleBasedResponsibilityProvisioningServiceTest
         
         e.setJobCode("CT3");
         
-        svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", e, now);
+        svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
       
         Assert.assertEquals(2, svc.getCurrentRoles().size());
         Assert.assertEquals(1, svc.getAddedRoles().size());
@@ -68,7 +68,7 @@ public class RuleBasedResponsibilityProvisioningServiceTest
         
         svc.getCurrentRoles().add(new RoleAssignment("ccci:itroles:uscore:siebel:resp:another","nathan.kopp@ccci.org","another.user@ccci.org",true));
         
-        svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", e, now);
+        svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
         
         Assert.assertEquals(3, svc.getCurrentRoles().size());
         Assert.assertEquals(0, svc.getAddedRoles().size());

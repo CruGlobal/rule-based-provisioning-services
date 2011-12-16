@@ -34,7 +34,7 @@ public class StaffWebRulesTest
         e.setEmplStatus("A");
 
         Date now = df.parse("1/1/2000");
-        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", e, now);
+        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
         
         Assert.assertEquals(1, proc.getCurrentRoles().size());
         Assert.assertEquals(1, proc.getAddedRoles().size());
@@ -62,7 +62,7 @@ public class StaffWebRulesTest
         e.setTermDate("1/1/2000");
 
         Date now = df.parse("1/1/2000");
-        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", e, now);
+        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
         
         Assert.assertEquals(1, proc.getCurrentRoles().size());
         Assert.assertEquals(1, proc.getAddedRoles().size());
@@ -76,7 +76,7 @@ public class StaffWebRulesTest
         
         proc.reset(true);
         now = df.parse("3/31/2000");
-        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", e, now);
+        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
         
         Assert.assertEquals(1, proc.getCurrentRoles().size());
         Assert.assertEquals(1, proc.getAddedRoles().size());
@@ -104,7 +104,7 @@ public class StaffWebRulesTest
         e.setTermDate("1/1/2000");
 
         Date now = df.parse("4/1/2000");
-        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", e, now);
+        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
         
         Assert.assertEquals(0, proc.getCurrentRoles().size());
         Assert.assertEquals(0, proc.getAddedRoles().size());
@@ -113,7 +113,7 @@ public class StaffWebRulesTest
         proc.reset(true);
         
         now = df.parse("4/2/2000");
-        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", e, now);
+        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
         
         Assert.assertEquals(0, proc.getCurrentRoles().size());
         Assert.assertEquals(0, proc.getAddedRoles().size());

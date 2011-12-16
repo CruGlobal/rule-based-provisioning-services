@@ -49,7 +49,7 @@ public class StaffWebRuleProvSvc
 	{
 	    authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
 	    
-	    ruleBasedStaffWebProvisioningService.computeAndApplyRolesForEmployee(globalId, employment, new Date());
+	    ruleBasedStaffWebProvisioningService.computeAndApplyRolesForEmployee(globalId, new Date(), employment);
 
 		return null;
 	}

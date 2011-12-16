@@ -56,7 +56,7 @@ public class SiebelRuleProvSvc
 	{
 	    authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
 	    
-		ruleBasedResponsibilityProvisioningService.computeAndApplyRolesForEmployee(globalId, employment, new Date());
+		ruleBasedResponsibilityProvisioningService.computeAndApplyRolesForEmployee(globalId, new Date(), employment);
 
 		return null;
 	}
@@ -66,7 +66,7 @@ public class SiebelRuleProvSvc
 	{
 	    authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
 	    
-		ruleBasedAccessGroupProvisioningService.computeAndApplyRolesForEmployee(globalId, employment, new Date());
+		ruleBasedAccessGroupProvisioningService.computeAndApplyRolesForEmployee(globalId, new Date(), employment);
 
 		return null;
 	}
