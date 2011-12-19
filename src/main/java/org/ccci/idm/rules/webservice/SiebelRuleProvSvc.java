@@ -12,8 +12,8 @@ import org.ccci.idm.authentication.credentials.impl.UsernamePasswordCredentials;
 import org.ccci.idm.authentication.handler.impl.PropertyBasedUsernamePasswordAuthHandler;
 import org.ccci.idm.authentication.manager.AuthenticationManager;
 import org.ccci.idm.authentication.manager.impl.AuthenticationManagerImpl;
-import org.ccci.idm.rules.processes.RuleBasedProvisioningProcess;
-import org.ccci.idm.rules.processes.RuleBasedProvisioningProcessGrouper;
+import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
+import org.ccci.idm.rules.services.RoleManagerServiceGrouper;
 import org.ccci.idm.util.PropertiesWithFallback;
 import org.ccci.soa.obj.USEmployment;
 
@@ -24,8 +24,8 @@ public class SiebelRuleProvSvc
     private AuthenticationManager authenticationManager;
     private Properties properties;
     
-	RuleBasedProvisioningProcess ruleBasedResponsibilityProvisioningService;
-	RuleBasedProvisioningProcess ruleBasedAccessGroupProvisioningService;
+	RuleBasedRoleProvisioningProcess ruleBasedResponsibilityProvisioningService;
+	RuleBasedRoleProvisioningProcess ruleBasedAccessGroupProvisioningService;
 
 	public SiebelRuleProvSvc()
 	{
@@ -34,16 +34,16 @@ public class SiebelRuleProvSvc
         authenticationManager = new AuthenticationManagerImpl();
         authenticationManager.addAuthenticationHandler(new PropertyBasedUsernamePasswordAuthHandler(properties, "user."));
 
-		ruleBasedResponsibilityProvisioningService = new RuleBasedProvisioningProcessGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel:resp", true);
+		ruleBasedResponsibilityProvisioningService = new RuleBasedRoleProvisioningProcess(new RoleManagerServiceGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel:resp", true));
 		ruleBasedResponsibilityProvisioningService.addExcelRuleset("classpath:SiebelResponsibilityProvisioningRules.xls", "Sheet1");
 		ruleBasedResponsibilityProvisioningService.addDrlRuleset("classpath:RemoveAllRoles.drl");
 
-		ruleBasedAccessGroupProvisioningService = new RuleBasedProvisioningProcessGrouper("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel:access_groups", true);
+		ruleBasedAccessGroupProvisioningService = new RuleBasedRoleProvisioningProcess(new RoleManagerServiceGrouper("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel:access_groups", true));
 		ruleBasedAccessGroupProvisioningService.addExcelRuleset("classpath:SiebelAccessGroupProvisioningRules.xls", "Sheet1");
 		ruleBasedAccessGroupProvisioningService.addDrlRuleset("classpath:RemoveAllRoles.drl");
 	}
 
-	public SiebelRuleProvSvc(RuleBasedProvisioningProcess ruleBasedResponsibilityProvisioningService, RuleBasedProvisioningProcess ruleBasedAccessGroupProvisioningService)
+	public SiebelRuleProvSvc(RuleBasedRoleProvisioningProcess ruleBasedResponsibilityProvisioningService, RuleBasedRoleProvisioningProcess ruleBasedAccessGroupProvisioningService)
 	{
 		super();
 
@@ -56,7 +56,7 @@ public class SiebelRuleProvSvc
 	{
 	    authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
 	    
-		ruleBasedResponsibilityProvisioningService.computeAndApplyRolesForEmployee(globalId, new Date(), employment);
+		ruleBasedResponsibilityProvisioningService.computeAndApplyRolesForUser(globalId, new Date(), employment);
 
 		return null;
 	}
@@ -66,7 +66,7 @@ public class SiebelRuleProvSvc
 	{
 	    authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
 	    
-		ruleBasedAccessGroupProvisioningService.computeAndApplyRolesForEmployee(globalId, new Date(), employment);
+		ruleBasedAccessGroupProvisioningService.computeAndApplyRolesForUser(globalId, new Date(), employment);
 
 		return null;
 	}

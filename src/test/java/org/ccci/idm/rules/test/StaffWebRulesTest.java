@@ -6,7 +6,8 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.ccci.idm.obj.RoleAssignment;
-import org.ccci.idm.rules.processes.RuleBasedProvisioningProcessForTest;
+import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
+import org.ccci.idm.rules.services.RoleManagerServiceMock;
 import org.ccci.soa.obj.USEmployment;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,7 +24,8 @@ public class StaffWebRulesTest
     @Test
     public void activeStaff() throws Exception
     {
-        RuleBasedProvisioningProcessForTest proc = new RuleBasedProvisioningProcessForTest("staffweb.responsibility.rules@ccci.org", "", false);
+        RoleManagerServiceMock svc = new RoleManagerServiceMock("staffweb.responsibility.rules@ccci.org");
+        RuleBasedRoleProvisioningProcess proc = new RuleBasedRoleProvisioningProcess(svc);
         proc.addDrlRuleset("classpath:StaffWebAccess.drl");
         
         // ==============================================================
@@ -34,13 +36,14 @@ public class StaffWebRulesTest
         e.setEmplStatus("A");
 
         Date now = df.parse("1/1/2000");
-        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
+        proc.computeAndApplyRolesForUser("nathan.kopp@ccci.org", now, e);
         
-        Assert.assertEquals(1, proc.getCurrentRoles().size());
-        Assert.assertEquals(1, proc.getAddedRoles().size());
-        Assert.assertEquals(0, proc.getRemovedRoles().size());
+        Assert.assertEquals(1, svc.getCurrentRoles().size());
+        Assert.assertEquals(1, svc.getAddedRoles().size());
+        Assert.assertEquals(0, svc.getRemovedRoles().size());
         
-        RoleAssignment r = getRole(proc.getCurrentRoles(), "ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer");
+        RoleAssignment r = getRole(svc.getCurrentRoles(), "ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer");
+        Assert.assertNotNull(r);
         Assert.assertEquals("staffweb.responsibility.rules@ccci.org", r.getAttestorId().toLowerCase());
         Assert.assertEquals("nathan.kopp@ccci.org", r.getAssigneeId().toLowerCase());
         Assert.assertFalse(r.getExisting());
@@ -50,7 +53,8 @@ public class StaffWebRulesTest
     @Test
     public void terminatedWithinGracePeriod() throws Exception
     {
-        RuleBasedProvisioningProcessForTest proc = new RuleBasedProvisioningProcessForTest("staffweb.responsibility.rules@ccci.org", "", false);
+        RoleManagerServiceMock svc = new RoleManagerServiceMock("staffweb.responsibility.rules@ccci.org");
+        RuleBasedRoleProvisioningProcess proc = new RuleBasedRoleProvisioningProcess(svc);
         proc.addDrlRuleset("classpath:StaffWebAccess.drl");
         
         // ==============================================================
@@ -62,27 +66,27 @@ public class StaffWebRulesTest
         e.setTermDate("1/1/2000");
 
         Date now = df.parse("1/1/2000");
-        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
+        proc.computeAndApplyRolesForUser("nathan.kopp@ccci.org", now, e);
         
-        Assert.assertEquals(1, proc.getCurrentRoles().size());
-        Assert.assertEquals(1, proc.getAddedRoles().size());
-        Assert.assertEquals(0, proc.getRemovedRoles().size());
+        Assert.assertEquals(1, svc.getCurrentRoles().size());
+        Assert.assertEquals(1, svc.getAddedRoles().size());
+        Assert.assertEquals(0, svc.getRemovedRoles().size());
         
-        RoleAssignment r = getRole(proc.getCurrentRoles(), "ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer");
+        RoleAssignment r = getRole(svc.getCurrentRoles(), "ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer");
         Assert.assertEquals("staffweb.responsibility.rules@ccci.org", r.getAttestorId().toLowerCase());
         Assert.assertEquals("nathan.kopp@ccci.org", r.getAssigneeId().toLowerCase());
         Assert.assertFalse(r.getExisting());
         Assert.assertEquals("3/31/00",df.format(r.getExpiration()));
         
-        proc.reset(true);
+        svc.reset(true);
         now = df.parse("3/31/2000");
-        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
+        proc.computeAndApplyRolesForUser("nathan.kopp@ccci.org", now, e);
         
-        Assert.assertEquals(1, proc.getCurrentRoles().size());
-        Assert.assertEquals(1, proc.getAddedRoles().size());
-        Assert.assertEquals(0, proc.getRemovedRoles().size());
+        Assert.assertEquals(1, svc.getCurrentRoles().size());
+        Assert.assertEquals(1, svc.getAddedRoles().size());
+        Assert.assertEquals(0, svc.getRemovedRoles().size());
         
-        r = getRole(proc.getCurrentRoles(), "ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer");
+        r = getRole(svc.getCurrentRoles(), "ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer");
         Assert.assertEquals("staffweb.responsibility.rules@ccci.org", r.getAttestorId().toLowerCase());
         Assert.assertEquals("nathan.kopp@ccci.org", r.getAssigneeId().toLowerCase());
         Assert.assertFalse(r.getExisting());
@@ -92,7 +96,8 @@ public class StaffWebRulesTest
     @Test
     public void terminatedPastGracePeriod() throws Exception
     {
-        RuleBasedProvisioningProcessForTest proc = new RuleBasedProvisioningProcessForTest("staffweb.responsibility.rules@ccci.org", "", false);
+        RoleManagerServiceMock svc = new RoleManagerServiceMock("staffweb.responsibility.rules@ccci.org");
+        RuleBasedRoleProvisioningProcess proc = new RuleBasedRoleProvisioningProcess(svc);
         proc.addDrlRuleset("classpath:StaffWebAccess.drl");
         
         // ==============================================================
@@ -104,20 +109,20 @@ public class StaffWebRulesTest
         e.setTermDate("1/1/2000");
 
         Date now = df.parse("4/1/2000");
-        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
+        proc.computeAndApplyRolesForUser("nathan.kopp@ccci.org", now, e);
         
-        Assert.assertEquals(0, proc.getCurrentRoles().size());
-        Assert.assertEquals(0, proc.getAddedRoles().size());
-        Assert.assertEquals(0, proc.getRemovedRoles().size());
+        Assert.assertEquals(0, svc.getCurrentRoles().size());
+        Assert.assertEquals(0, svc.getAddedRoles().size());
+        Assert.assertEquals(0, svc.getRemovedRoles().size());
         
-        proc.reset(true);
+        svc.reset(true);
         
         now = df.parse("4/2/2000");
-        proc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
+        proc.computeAndApplyRolesForUser("nathan.kopp@ccci.org", now, e);
         
-        Assert.assertEquals(0, proc.getCurrentRoles().size());
-        Assert.assertEquals(0, proc.getAddedRoles().size());
-        Assert.assertEquals(0, proc.getRemovedRoles().size());
+        Assert.assertEquals(0, svc.getCurrentRoles().size());
+        Assert.assertEquals(0, svc.getAddedRoles().size());
+        Assert.assertEquals(0, svc.getRemovedRoles().size());
     }
 
     private boolean containsRole(Collection<RoleAssignment> roles, RoleAssignment roleAssignment)

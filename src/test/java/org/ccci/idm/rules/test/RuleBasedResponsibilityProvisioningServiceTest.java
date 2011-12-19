@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.ccci.idm.obj.RoleAssignment;
-import org.ccci.idm.rules.processes.RuleBasedProvisioningProcessForTest;
+import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
+import org.ccci.idm.rules.services.RoleManagerServiceMock;
 import org.ccci.soa.obj.USEmployment;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,9 +22,10 @@ public class RuleBasedResponsibilityProvisioningServiceTest
     @Test
     public void basicDemo() throws Exception
     {
-        RuleBasedProvisioningProcessForTest svc = new RuleBasedProvisioningProcessForTest("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel:resp", true);
-        svc.addExcelRuleset("classpath:Test1Rules.xls", "Sheet1");
-        svc.addDrlRuleset("classpath:RemoveAllRoles.drl");
+        RoleManagerServiceMock svc = new RoleManagerServiceMock("siebel.responsibility.rules@ccci.org");
+        RuleBasedRoleProvisioningProcess proc = new RuleBasedRoleProvisioningProcess(svc);
+        proc.addExcelRuleset("classpath:Test1Rules.xls", "Sheet1");
+        proc.addDrlRuleset("classpath:RemoveAllRoles.drl");
         
         
         
@@ -38,7 +40,7 @@ public class RuleBasedResponsibilityProvisioningServiceTest
         e.setEmplStatus("A");
         e.setJobCode("CT2");
 
-        svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
+        proc.computeAndApplyRolesForUser("nathan.kopp@ccci.org", now, e);
         
         Assert.assertEquals(2, svc.getCurrentRoles().size());
         Assert.assertEquals(2, svc.getAddedRoles().size());
@@ -53,7 +55,7 @@ public class RuleBasedResponsibilityProvisioningServiceTest
         
         e.setJobCode("CT3");
         
-        svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
+        proc.computeAndApplyRolesForUser("nathan.kopp@ccci.org", now, e);
       
         Assert.assertEquals(2, svc.getCurrentRoles().size());
         Assert.assertEquals(1, svc.getAddedRoles().size());
@@ -68,7 +70,7 @@ public class RuleBasedResponsibilityProvisioningServiceTest
         
         svc.getCurrentRoles().add(new RoleAssignment("ccci:itroles:uscore:siebel:resp:another","nathan.kopp@ccci.org","another.user@ccci.org",true));
         
-        svc.computeAndApplyRolesForEmployee("nathan.kopp@ccci.org", now, e);
+        proc.computeAndApplyRolesForUser("nathan.kopp@ccci.org", now, e);
         
         Assert.assertEquals(3, svc.getCurrentRoles().size());
         Assert.assertEquals(0, svc.getAddedRoles().size());

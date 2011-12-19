@@ -12,8 +12,8 @@ import org.ccci.idm.authentication.credentials.impl.UsernamePasswordCredentials;
 import org.ccci.idm.authentication.handler.impl.PropertyBasedUsernamePasswordAuthHandler;
 import org.ccci.idm.authentication.manager.AuthenticationManager;
 import org.ccci.idm.authentication.manager.impl.AuthenticationManagerImpl;
-import org.ccci.idm.rules.processes.RuleBasedProvisioningProcess;
-import org.ccci.idm.rules.processes.RuleBasedProvisioningProcessGrouper;
+import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
+import org.ccci.idm.rules.services.RoleManagerServiceGrouper;
 import org.ccci.idm.util.PropertiesWithFallback;
 import org.ccci.soa.obj.USEmployment;
 
@@ -24,7 +24,7 @@ public class StaffWebRuleProvSvc
     private AuthenticationManager authenticationManager;
     private Properties properties;
     
-	RuleBasedProvisioningProcess ruleBasedStaffWebProvisioningService;
+	RuleBasedRoleProvisioningProcess ruleBasedStaffWebProvisioningService;
 
 	public StaffWebRuleProvSvc()
 	{
@@ -33,11 +33,11 @@ public class StaffWebRuleProvSvc
         authenticationManager = new AuthenticationManagerImpl();
         authenticationManager.addAuthenticationHandler(new PropertyBasedUsernamePasswordAuthHandler(properties, "user."));
 
-        ruleBasedStaffWebProvisioningService = new RuleBasedProvisioningProcessGrouper("staffweb.responsibility.rules@ccci.org", "", false);
+        ruleBasedStaffWebProvisioningService = new RuleBasedRoleProvisioningProcess(new RoleManagerServiceGrouper("staffweb.responsibility.rules@ccci.org", "", false));
         ruleBasedStaffWebProvisioningService.addDrlRuleset("classpath:StaffWebAccess.drl");
 	}
 
-	public StaffWebRuleProvSvc(RuleBasedProvisioningProcess ruleBasedStaffWebProvisioningService)
+	public StaffWebRuleProvSvc(RuleBasedRoleProvisioningProcess ruleBasedStaffWebProvisioningService)
 	{
 		super();
 
@@ -49,7 +49,7 @@ public class StaffWebRuleProvSvc
 	{
 	    authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
 	    
-	    ruleBasedStaffWebProvisioningService.computeAndApplyRolesForEmployee(globalId, new Date(), employment);
+	    ruleBasedStaffWebProvisioningService.computeAndApplyRolesForUser(globalId, new Date(), employment);
 
 		return null;
 	}
