@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.ccci.idm.obj.RoleAssignment;
-import org.ccci.idm.util.Util;
+import org.ccci.util.NkUtil;
 
 public class RoleManagerServiceMock implements RoleManagerService
 {
@@ -118,7 +118,7 @@ public class RoleManagerServiceMock implements RoleManagerService
     @Override
     public String convertRoleNameToFullPath(String name)
     {
-        if(Util.isBlank(roleBasePath)) return convertRoleNames?convertRoleNameToId(name):name;
+        if(NkUtil.isBlank(roleBasePath)) return convertRoleNames?convertRoleNameToId(name):name;
         else return roleBasePath +":"+(convertRoleNames?convertRoleNameToId(name):name);
     }
 

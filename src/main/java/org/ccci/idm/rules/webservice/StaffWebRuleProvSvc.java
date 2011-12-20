@@ -14,8 +14,8 @@ import org.ccci.idm.authentication.manager.AuthenticationManager;
 import org.ccci.idm.authentication.manager.impl.AuthenticationManagerImpl;
 import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
 import org.ccci.idm.rules.services.RoleManagerServiceGrouper;
-import org.ccci.idm.util.PropertiesWithFallback;
 import org.ccci.soa.obj.USEmployment;
+import org.ccci.util.properties.PropertiesWithFallback;
 
 @WebService()
 @Stateless()

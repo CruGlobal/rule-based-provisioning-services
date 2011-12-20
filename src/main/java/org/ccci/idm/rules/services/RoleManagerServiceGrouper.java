@@ -8,7 +8,7 @@ import org.ccci.idm.grouper.dao.GrouperDao;
 import org.ccci.idm.grouper.dao.GrouperDaoImpl;
 import org.ccci.idm.grouper.obj.GrouperMembership;
 import org.ccci.idm.obj.RoleAssignment;
-import org.ccci.idm.util.Util;
+import org.ccci.util.NkUtil;
 
 public class RoleManagerServiceGrouper implements RoleManagerService
 {
@@ -99,7 +99,7 @@ public class RoleManagerServiceGrouper implements RoleManagerService
     @Override
     public String convertRoleNameToFullPath(String name)
     {
-        if(Util.isBlank(roleBasePath)) return convertRoleNames?convertRoleNameToId(name):name;
+        if(NkUtil.isBlank(roleBasePath)) return convertRoleNames?convertRoleNameToId(name):name;
         else return roleBasePath+":"+(convertRoleNames?convertRoleNameToId(name):name);
     }
 

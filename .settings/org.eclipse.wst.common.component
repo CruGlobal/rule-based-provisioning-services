@@ -10,6 +10,9 @@
         <dependent-module archiveName="identity-core-1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/identity-core/identity-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="util-3-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/util/util">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="rule-based-provisioning-services"/>
         <property name="java-output-path" value="/rule-based-provisioning-services/target/classes"/>
     </wb-module>

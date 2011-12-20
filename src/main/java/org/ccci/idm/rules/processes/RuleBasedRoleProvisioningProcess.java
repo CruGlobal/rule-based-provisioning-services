@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.ccci.idm.obj.RoleAssignment;
 import org.ccci.idm.rules.services.RoleManagerService;
-import org.ccci.idm.util.Util;
+import org.ccci.util.NkUtil;
 import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseFactory;
 import org.drools.builder.DecisionTableConfiguration;
@@ -123,7 +123,7 @@ public class RuleBasedRoleProvisioningProcess
                 roleManager.removeRoleFromPerson(newOne);
                 roleManager.assignRoleToPerson(newOne);
             }
-            else if(!Util.equal(found.getExpiration(),newOne.getExpiration()))
+            else if(!NkUtil.equal(found.getExpiration(),newOne.getExpiration()))
             {
                 roleManager.updateRoleExpiration(newOne);
             }
@@ -209,7 +209,7 @@ public class RuleBasedRoleProvisioningProcess
     {
         for(RoleAssignment r : newAssignments)
         {
-            if(!r.isExisting() && Util.isBlank(r.getAttestorId()))
+            if(!r.isExisting() && NkUtil.isBlank(r.getAttestorId()))
             {
                 r.setAttestorId(roleManager.getAttestorId());
                 r.setAssigneeId(ssoGuid);
