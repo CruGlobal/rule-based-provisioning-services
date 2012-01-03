@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -17,15 +16,13 @@ import org.ccci.idm.authentication.manager.AuthenticationManager;
 import org.ccci.idm.authentication.manager.impl.AuthenticationManagerImpl;
 import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
 import org.ccci.idm.rules.services.RoleManagerServiceGrouper;
-import org.ccci.soa.obj.USEmployment;
 import org.ccci.soa.pshr.client.StaffService;
 import org.ccci.soa.pshr.client.StaffServiceService;
 import org.ccci.soa.pshr.client.UsStaffMember;
-import org.ccci.util.properties.PropertiesWithFallback;
 import org.ccci.util.properties.CcciProperties.PropertyEncryptionSetup;
+import org.ccci.util.properties.PropertiesWithFallback;
 
 @WebService()
-@Stateless()
 public class SiebelRuleProvSvc
 {
     private AuthenticationManager authenticationManager;
@@ -40,10 +37,15 @@ public class SiebelRuleProvSvc
 	public SiebelRuleProvSvc() throws Exception
 	{
 		super();
+		System.out.println("SiebelRuleProvSvc.setupProperties");
 		setupProperties();
+		System.out.println("SiebelRuleProvSvc.setupAuthenticationManager");
 		setupAuthenticationManager();
+		System.out.println("SiebelRuleProvSvc.setupRules");
 		setupRules();
+		System.out.println("SiebelRuleProvSvc.setupStaffServiceClient");
 		setupStaffServiceClient();
+		System.out.println("SiebelRuleProvSvc done");
 	}
 
 	public SiebelRuleProvSvc(RuleBasedRoleProvisioningProcess ruleBasedResponsibilityProvisioningService, RuleBasedRoleProvisioningProcess ruleBasedAccessGroupProvisioningService)

@@ -16,6 +16,12 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.2.5</version>
+		</dependency>
+	
+		<dependency>
 			<groupId>org.ccci</groupId>
 			<artifactId>soa-pshr-services-client</artifactId>
 			<version>1-SNAPSHOT</version>
@@ -59,11 +65,13 @@
 		    <artifactId>drools-jsr94</artifactId>
 		    <version>5.2.0.Final</version>
 		</dependency>
+		<!-- 
 		<dependency>
 		    <groupId>org.drools</groupId>
 		    <artifactId>drools-persistence-jpa</artifactId>
 		    <version>5.2.0.Final</version>
 		</dependency>
+		 -->
 		<dependency>
 		    <groupId>org.drools</groupId>
 		    <artifactId>drools-templates</artifactId>
@@ -86,22 +94,23 @@
 			<dependency> <groupId>commons-collections</groupId> <artifactId>commons-collections</artifactId> 
 			<version>3.2.1</version> </dependency> <dependency> <groupId>commons-digester</groupId> 
 			<artifactId>commons-digester</artifactId> <version>2.1</version> </dependency> -->
-
+<!-- 
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
 			<version>1.0.0.Final</version>
 			<scope>provided</scope>
 		</dependency>
+ -->
 
-
+<!-- 
 		<dependency>
 			<groupId>org.jboss.spec.javax.ejb</groupId>
 			<artifactId>jboss-ejb-api_3.1_spec</artifactId>
 			<version>1.0.1.Final</version>
 			<scope>provided</scope>
 		</dependency>
-
+ -->
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
@@ -147,6 +156,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <!-- <version>2.1.1</version> -->
                 <configuration>
+                	<warName>rule-based-provisioning-services</warName>
                     <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
                 </configuration>
             </plugin>
