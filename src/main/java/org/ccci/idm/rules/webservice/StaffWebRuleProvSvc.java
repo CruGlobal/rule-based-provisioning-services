@@ -37,11 +37,8 @@ public class StaffWebRuleProvSvc
 	public StaffWebRuleProvSvc() throws Exception
 	{
 		super();
-		System.out.println("StaffWebRuleProvSvc.setupProperties");
 		setupProperties();
-        System.out.println("StaffWebRuleProvSvc.setupAuthenticationManager");
         setupAuthenticationManager();
-        System.out.println("StaffWebRuleProvSvc.setupRules");
         setupRules();
         // WARNING: we can't call setupStaffServiceClient() in the constructor if this is deployed in the same
         // container as the StaffServiceClient!  If so, it will create a deadlock, since tomcat doesn't start
@@ -49,7 +46,6 @@ public class StaffWebRuleProvSvc
         // processing requests for the WSDL
         //System.out.println("StaffWebRuleProvSvc.setupStaffServiceClient");
         //setupStaffServiceClient();
-        System.out.println("StaffWebRuleProvSvc done");
 	}
 
 	public StaffWebRuleProvSvc(RuleBasedRoleProvisioningProcess ruleBasedStaffWebProvisioningService, StaffService service)
@@ -74,7 +70,7 @@ public class StaffWebRuleProvSvc
     private void setupProperties()
     {
         PropertyEncryptionSetup encryptionSetup = new PropertyEncryptionSetup("lco97gf5t7D%Y4bh89%U34IF&l*()$Hg6wRD^j4");
-        properties = new PropertiesWithFallback(encryptionSetup, false, "/ora/config/staffWebRuleProvSvc.properties","/default.properties");
+        properties = new PropertiesWithFallback(encryptionSetup, false, "/ora/apps-config/staffWebRuleProvSvc.properties","/default.properties");
     }
 
     private void setupRules()
@@ -86,36 +82,23 @@ public class StaffWebRuleProvSvc
     private void setupAuthenticationManager()
     {
         authenticationManager = new AuthenticationManagerImpl();
-        authenticationManager.addAuthenticationHandler(new PropertyBasedUsernamePasswordAuthHandler(properties, "user."));
+        authenticationManager.addAuthenticationHandler(new PropertyBasedUsernamePasswordAuthHandler(properties, "staffwebrules.user."));
     }
 
     private synchronized void setupStaffServiceClientIfNecessary() throws MalformedURLException
     {
         if(service!=null) return;
-        System.out.println("a");
         String wsdlUrl = properties.getProperty("staffService.wsdlUrl");
-        System.out.println("b");
         String namespace = properties.getProperty("staffService.namespace");
-        System.out.println("c");
         String serviceName = properties.getProperty("staffService.serviceName");
         URL wsdl = new URL(wsdlUrl);
-        System.out.println("d");
         QName serviceQname = new QName(namespace, serviceName);
-        System.out.println("e");
-        
-        System.out.println("1");
         
         StaffServiceService locator = new StaffServiceService(wsdl, serviceQname);
-        System.out.println("2");
         service = locator.getStaffServicePort();
         
-        System.out.println("3");
-        
         serviceServerId = properties.getProperty("staffService.serverId");
-        System.out.println("4");
         serviceServerSecret = properties.getProperty("staffService.serverSecret");
-        
-        System.out.println("5");
     }
 
 

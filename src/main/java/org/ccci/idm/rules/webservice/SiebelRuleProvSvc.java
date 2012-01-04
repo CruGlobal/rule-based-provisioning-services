@@ -80,7 +80,7 @@ public class SiebelRuleProvSvc
 	private void setupProperties()
     {
         PropertyEncryptionSetup encryptionSetup = new PropertyEncryptionSetup("lco97gf5t7D%Y4bh89%U34IF&l*()$Hg6wRD^j4");
-        properties = new PropertiesWithFallback(encryptionSetup, false, "/ora/config/siebelRuleProvSvc.properties","/default.properties");
+        properties = new PropertiesWithFallback(encryptionSetup, false, "/ora/apps-config/siebelRuleProvSvc.properties","/default.properties");
     }
 
     private void setupRules()
