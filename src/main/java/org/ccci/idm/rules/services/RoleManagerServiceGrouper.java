@@ -50,11 +50,11 @@ public class RoleManagerServiceGrouper implements RoleManagerService
         try
         {
             GrouperMembership existing = dao.getMembership(r.getAssigneeId(), r.getRoleId());
-            if(existing!=null)
+            if(existing==null)
             {
                 dao.addMember(r.getAssigneeId(), r.getRoleId());
-                dao.setExpiration(r.getAssigneeId(), r.getRoleId(), r.getExpiration());
             }
+            dao.setExpiration(r.getAssigneeId(), r.getRoleId(), r.getExpiration());
         }
         finally
         {
