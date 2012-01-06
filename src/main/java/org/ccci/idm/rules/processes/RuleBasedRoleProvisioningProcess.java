@@ -94,6 +94,12 @@ public class RuleBasedRoleProvisioningProcess
         Collection<RoleAssignment> externalExistingAssignments = filterExistingRolesKeepExternal(allExistingAssignments);
         Collection<RoleAssignment> newAssignments = computeNewRoleAssignments(ssoGuid, externalExistingAssignments, now, facts);
         
+        System.out.println("role assignments: "+newAssignments.size());
+        for(RoleAssignment r : newAssignments)
+        {
+            System.out.println("role assignment: "+r.getAssigneeId()+" to "+r.getRoleId());
+        }
+        
         applyRoleAssignments(newAssignments, allExistingAssignments);
 
         return null;
@@ -276,7 +282,7 @@ public class RuleBasedRoleProvisioningProcess
     
         if (kbuilder.hasErrors())
         {
-            throw new RuntimeException("Ruleset SiebelProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
+            throw new RuntimeException("Ruleset "+changeSetFileName+" has errors:\n" + kbuilder.getErrors());
         }
     
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
@@ -305,7 +311,7 @@ public class RuleBasedRoleProvisioningProcess
     
         if (kbuilder.hasErrors())
         {
-            throw new RuntimeException("Ruleset SiebelProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
+            throw new RuntimeException("Ruleset "+drlFileName+" has errors:\n" + kbuilder.getErrors());
         }
     
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
@@ -322,7 +328,7 @@ public class RuleBasedRoleProvisioningProcess
     
         if (kbuilder.hasErrors())
         {
-            throw new RuntimeException("Ruleset SiebelProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
+            throw new RuntimeException("Ruleset "+pkgFileName+" has errors:\n" + kbuilder.getErrors());
         }
     
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
@@ -346,7 +352,7 @@ public class RuleBasedRoleProvisioningProcess
   
         if (kbuilder.hasErrors())
         {
-            throw new RuntimeException("Ruleset SiebelProvisioningRules.xls has errors:\n" + kbuilder.getErrors());
+            throw new RuntimeException("Ruleset "+excelFileName+" has errors:\n" + kbuilder.getErrors());
         }
   
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());

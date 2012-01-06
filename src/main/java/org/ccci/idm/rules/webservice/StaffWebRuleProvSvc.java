@@ -14,10 +14,12 @@ import org.ccci.idm.authentication.credentials.impl.UsernamePasswordCredentials;
 import org.ccci.idm.authentication.handler.impl.PropertyBasedUsernamePasswordAuthHandler;
 import org.ccci.idm.authentication.manager.AuthenticationManager;
 import org.ccci.idm.authentication.manager.impl.AuthenticationManagerImpl;
+import org.ccci.idm.rules.obj.EmployeeInfo;
 import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
 import org.ccci.idm.rules.services.RoleManagerServiceGrouper;
 import org.ccci.soa.pshr.client.StaffService;
 import org.ccci.soa.pshr.client.StaffServiceService;
+import org.ccci.soa.pshr.client.UsEmployeeInfo;
 import org.ccci.soa.pshr.client.UsStaffMember;
 import org.ccci.util.properties.CcciProperties.PropertyEncryptionSetup;
 import org.ccci.util.properties.PropertiesWithFallback;
@@ -44,7 +46,6 @@ public class StaffWebRuleProvSvc
         // container as the StaffServiceClient!  If so, it will create a deadlock, since tomcat doesn't start
         // listening on the port until all web apps have loaded, and this function will block until tomcat starts
         // processing requests for the WSDL
-        //System.out.println("StaffWebRuleProvSvc.setupStaffServiceClient");
         //setupStaffServiceClient();
 	}
 
@@ -59,11 +60,15 @@ public class StaffWebRuleProvSvc
     public String provisionStaffWebConsumerForEmployee(@WebParam(name = "serverId") String serverId, @WebParam(name = "serverSecret") String serverSecret, @WebParam(name = "ssoGuid") String ssoGuid, @WebParam(name = "emplid") String emplid) throws Exception
     {
         authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
+        
         setupStaffServiceClientIfNecessary();
+        
         UsStaffMember staff = service.getStaff(serviceServerId, serviceServerSecret, emplid);
+        
         if(staff==null) throw new RuntimeException("Emplid is not valid.");
-        ruleBasedStaffWebProvisioningService.computeAndApplyRolesForUser(ssoGuid, new Date(), staff.getEmploymentInfo());
-        return null;
+        ruleBasedStaffWebProvisioningService.computeAndApplyRolesForUser(ssoGuid, new Date(), new EmployeeInfo(staff.getEmploymentInfo()));
+
+        return "done";
     }
     
     

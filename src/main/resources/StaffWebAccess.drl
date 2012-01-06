@@ -1,6 +1,6 @@
 import org.ccci.idm.obj.SsoUser
 import org.ccci.idm.obj.RoleAssignment
-import org.ccci.soa.obj.USEmployment
+import org.ccci.idm.rules.obj.EmployeeInfo
 import java.util.Date
 
 global java.util.Date now
@@ -18,7 +18,7 @@ end
 
 rule "ActivateGracePeriodForStaff"
 	when
-		USEmployment( emplStatus != "A",
+		EmployeeInfo( emplStatus != "A",
 					  paygroup in ("USS", "INT", "RCE", "SAL", "HFT", "HPT"),
 					  $endDate : addDaysToDates(termDateAsDate, 90)>=now)
 	then
@@ -27,7 +27,7 @@ end
 
 rule "ActivateGracePeriodForInterns"
 	when
-		USEmployment( emplStatus != "A",
+		EmployeeInfo( emplStatus != "A",
 					  paygroup not in ("USS", "INT", "RCE", "SAL", "HFT", "HPT"),
 					  $endDate : addDaysToDates(termDateAsDate, 30)>=now)
 	then
@@ -36,14 +36,14 @@ end
 
 rule "EnableStaffWebConsumerWhenActive"
     when
-        USEmployment( emplStatus == "A" )
+        EmployeeInfo( emplStatus == "A" )
     then
         insert(new RoleAssignment("ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer"));
 end
 
 rule "WithinGracePeriod"
     when
-        USEmployment( emplStatus != "A" )
+        EmployeeInfo( emplStatus != "A" )
         ActiveGracePeriod($endDate : endDate)
     then
         insert(new RoleAssignment("ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer", $endDate));
@@ -53,7 +53,7 @@ end
 This would remove manaully-asserted roles... so that wouldn't be good
 rule "RemoveManuallyAssignedStaffWebConsumer"
     when
-        USEmployment( emplStatus != "A" )
+        EmployeeInfo( emplStatus != "A" )
         not ActiveGracePeriod()
         r : RoleAssignment( roleId=="ccci:itroles:uscore:stellent:roles:StaffOnlyConsumer" )
     then

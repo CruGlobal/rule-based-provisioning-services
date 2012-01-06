@@ -6,9 +6,10 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.ccci.idm.obj.RoleAssignment;
+import org.ccci.idm.rules.obj.EmployeeInfo;
 import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
 import org.ccci.idm.rules.services.RoleManagerServiceMock;
-import org.ccci.soa.obj.USEmployment;
+import org.ccci.soa.pshr.client.UsEmployeeInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class StaffWebRulesTest
         
         // ==============================================================
         // initial setup
-        USEmployment e = new USEmployment();
+        EmployeeInfo e = new EmployeeInfo(new UsEmployeeInfo());
         e.setTermDate(null);
         e.setPaygroup("USS");
         e.setEmplStatus("A");
@@ -59,7 +60,7 @@ public class StaffWebRulesTest
         
         // ==============================================================
         // initial setup
-        USEmployment e = new USEmployment();
+        EmployeeInfo e = new EmployeeInfo(new UsEmployeeInfo());
         e.setTermDate(null);
         e.setPaygroup("USS");
         e.setEmplStatus("T");
@@ -102,7 +103,7 @@ public class StaffWebRulesTest
         
         // ==============================================================
         // initial setup
-        USEmployment e = new USEmployment();
+        EmployeeInfo e = new EmployeeInfo(new UsEmployeeInfo());
         e.setTermDate(null);
         e.setPaygroup("USS");
         e.setEmplStatus("T");
