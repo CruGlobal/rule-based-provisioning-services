@@ -56,7 +56,7 @@ public class StaffWebRuleProvSvc
 		this.service = service;
 	}
 
-    @WebMethod(operationName = "provisionSiebelResponsibilityAccessForEmployee")
+    @WebMethod(operationName = "provisionStaffWebConsumerForEmployee")
     public String provisionStaffWebConsumerForEmployee(@WebParam(name = "serverId") String serverId, @WebParam(name = "serverSecret") String serverSecret, @WebParam(name = "ssoGuid") String ssoGuid, @WebParam(name = "emplid") String emplid) throws Exception
     {
         authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
