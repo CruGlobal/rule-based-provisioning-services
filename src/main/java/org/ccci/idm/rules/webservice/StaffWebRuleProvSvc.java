@@ -75,7 +75,7 @@ public class StaffWebRuleProvSvc
     private void setupProperties()
     {
         PropertyEncryptionSetup encryptionSetup = new PropertyEncryptionSetup("lco97gf5t7D%Y4bh89%U34IF&l*()$Hg6wRD^j4");
-        properties = new PropertiesWithFallback(encryptionSetup, false, "/ora/apps-config/staffWebRuleProvSvc.properties","/default.properties");
+        properties = new PropertiesWithFallback(encryptionSetup, false, "/apps/apps-config/staffWebRuleProvSvc.properties", "/ora/apps-config/staffWebRuleProvSvc.properties","/default.properties");
     }
 
     private void setupRules()
