@@ -7,6 +7,7 @@ global java.util.Date now
 
 function Date addDaysToDates(Date termDate, int graceDays)
 {
+    if(termDate==null) return null;
     Date termDatePlusGrace = new Date();
     termDatePlusGrace.setTime(termDate.getTime()+graceDays*24L*60*60*1000);
     return termDatePlusGrace;
