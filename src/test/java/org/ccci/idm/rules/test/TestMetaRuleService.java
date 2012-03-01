@@ -16,7 +16,6 @@ public class TestMetaRuleService
     public void firstTest() throws Exception
     {
         Properties props = new Properties();
-        props.setProperty("ldapUrl", "ldap://oidtst.ccci.org:389");
         props.setProperty("rulesets", "stellent");
         props.setProperty("stellent.attestationUser", "stellent.rules@ccci.org");
         props.setProperty("stellent.grouperBase", "ccci:itroles:uscore:stellent");
