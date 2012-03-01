@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.ccci.idm.obj.RoleAssignment;
-import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
 import org.ccci.idm.rules.services.RoleManagerServiceMock;
+import org.ccci.idm.rules.services.RuleBasedRoleProvisioningService;
 import org.ccci.soa.obj.USEmployment;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class RuleBasedResponsibilityProvisioningServiceTest
     public void basicDemo() throws Exception
     {
         RoleManagerServiceMock svc = new RoleManagerServiceMock("siebel.responsibility.rules@ccci.org");
-        RuleBasedRoleProvisioningProcess proc = new RuleBasedRoleProvisioningProcess(svc);
+        RuleBasedRoleProvisioningService proc = new RuleBasedRoleProvisioningService(svc);
         proc.addExcelRuleset("classpath:Test1Rules.xls", "Sheet1");
         proc.addDrlRuleset("classpath:RemoveAllRoles.drl");
         

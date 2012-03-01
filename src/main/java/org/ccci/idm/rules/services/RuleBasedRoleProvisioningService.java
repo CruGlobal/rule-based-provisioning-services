@@ -1,12 +1,13 @@
-package org.ccci.idm.rules.processes;
+package org.ccci.idm.rules.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.ccci.idm.obj.RoleAssignment;
-import org.ccci.idm.rules.services.RoleManagerService;
 import org.ccci.util.NkUtil;
 import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseFactory;
@@ -64,18 +65,27 @@ import org.drools.runtime.rule.FactHandle;
  * @author Nathan.Kopp
  *
  */
-public class RuleBasedRoleProvisioningProcess
+public class RuleBasedRoleProvisioningService
 {
     protected KnowledgeBase kbase;
     protected RoleManagerService roleManager;
+    protected String name;
+    
+    protected Set<String> requiredFacts;
 
-    public RuleBasedRoleProvisioningProcess(RoleManagerService roleManager)
+    public RuleBasedRoleProvisioningService(RoleManagerService roleManager)
     {
         super();
         this.roleManager = roleManager;
         kbase = KnowledgeBaseFactory.newKnowledgeBase();
         ResourceFactory.getResourceChangeNotifierService().start();
         ResourceFactory.getResourceChangeScannerService().start();
+    }
+    
+    public synchronized void addRequiredFact(String factName)
+    {
+        if(requiredFacts==null) requiredFacts = new HashSet<String>();
+        requiredFacts.add(factName);
     }
     
     /**
@@ -356,6 +366,21 @@ public class RuleBasedRoleProvisioningProcess
         }
   
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
+    }
+
+    public Set<String> getRequiredFacts()
+    {
+        return requiredFacts;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
 

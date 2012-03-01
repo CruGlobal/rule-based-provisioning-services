@@ -15,8 +15,8 @@ import org.ccci.idm.authentication.handler.impl.PropertyBasedUsernamePasswordAut
 import org.ccci.idm.authentication.manager.AuthenticationManager;
 import org.ccci.idm.authentication.manager.impl.AuthenticationManagerImpl;
 import org.ccci.idm.rules.obj.EmployeeInfo;
-import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
 import org.ccci.idm.rules.services.RoleManagerServiceGrouper;
+import org.ccci.idm.rules.services.RuleBasedRoleProvisioningService;
 import org.ccci.soa.pshr.client.StaffService;
 import org.ccci.soa.pshr.client.StaffServiceService;
 import org.ccci.soa.pshr.client.UsEmployeeInfo;
@@ -30,7 +30,7 @@ public class StaffWebRuleProvSvc
     private AuthenticationManager authenticationManager;
     private Properties properties;
     
-	private RuleBasedRoleProvisioningProcess ruleBasedStaffWebProvisioningService;
+	private RuleBasedRoleProvisioningService ruleBasedStaffWebProvisioningService;
 	private StaffService service;
 	private String serviceServerId;
 	private String serviceServerSecret;
@@ -49,7 +49,7 @@ public class StaffWebRuleProvSvc
         //setupStaffServiceClient();
 	}
 
-	public StaffWebRuleProvSvc(RuleBasedRoleProvisioningProcess ruleBasedStaffWebProvisioningService, StaffService service)
+	public StaffWebRuleProvSvc(RuleBasedRoleProvisioningService ruleBasedStaffWebProvisioningService, StaffService service)
 	{
 		super();
 		this.ruleBasedStaffWebProvisioningService = ruleBasedStaffWebProvisioningService;
@@ -80,7 +80,7 @@ public class StaffWebRuleProvSvc
 
     private void setupRules()
     {
-        ruleBasedStaffWebProvisioningService = new RuleBasedRoleProvisioningProcess(new RoleManagerServiceGrouper("staffweb.responsibility.rules@ccci.org", "", false));
+        ruleBasedStaffWebProvisioningService = new RuleBasedRoleProvisioningService(new RoleManagerServiceGrouper("staffweb.responsibility.rules@ccci.org", "", false));
         ruleBasedStaffWebProvisioningService.addDrlRuleset("classpath:StaffWebAccess-v3.drl");
     }
 

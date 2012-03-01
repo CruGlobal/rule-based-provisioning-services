@@ -8,8 +8,8 @@ import java.util.Date;
 import org.ccci.idm.obj.IdentityUser;
 import org.ccci.idm.obj.RoleAssignment;
 import org.ccci.idm.rules.obj.EmployeeInfo;
-import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
 import org.ccci.idm.rules.services.RoleManagerServiceMock;
+import org.ccci.idm.rules.services.RuleBasedRoleProvisioningService;
 import org.ccci.soa.pshr.client.UsEmployeeInfo;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class StaffWebRulesTest
     public void activeStaff() throws Exception
     {
         RoleManagerServiceMock svc = new RoleManagerServiceMock("stellent.rules@ccci.org");
-        RuleBasedRoleProvisioningProcess proc = new RuleBasedRoleProvisioningProcess(svc);
+        RuleBasedRoleProvisioningService proc = new RuleBasedRoleProvisioningService(svc);
         proc.addDrlRuleset("classpath:StaffWebAccess.drl");
         
         // ==============================================================
@@ -56,7 +56,7 @@ public class StaffWebRulesTest
     public void terminatedWithinGracePeriod() throws Exception
     {
         RoleManagerServiceMock svc = new RoleManagerServiceMock("stellent.rules@ccci.org");
-        RuleBasedRoleProvisioningProcess proc = new RuleBasedRoleProvisioningProcess(svc);
+        RuleBasedRoleProvisioningService proc = new RuleBasedRoleProvisioningService(svc);
         proc.addDrlRuleset("classpath:StaffWebAccess.drl");
         
         // ==============================================================
@@ -99,7 +99,7 @@ public class StaffWebRulesTest
     public void terminatedPastGracePeriod() throws Exception
     {
         RoleManagerServiceMock svc = new RoleManagerServiceMock("stellent.rules@ccci.org");
-        RuleBasedRoleProvisioningProcess proc = new RuleBasedRoleProvisioningProcess(svc);
+        RuleBasedRoleProvisioningService proc = new RuleBasedRoleProvisioningService(svc);
         proc.addDrlRuleset("classpath:StaffWebAccess.drl");
         
         // ==============================================================
@@ -131,7 +131,7 @@ public class StaffWebRulesTest
     public void nationalStaff() throws Exception
     {
         RoleManagerServiceMock svc = new RoleManagerServiceMock("stellent.rules@ccci.org");
-        RuleBasedRoleProvisioningProcess proc = new RuleBasedRoleProvisioningProcess(svc);
+        RuleBasedRoleProvisioningService proc = new RuleBasedRoleProvisioningService(svc);
         proc.addDrlRuleset("classpath:StaffWebAccess.drl");
         
         // ==============================================================

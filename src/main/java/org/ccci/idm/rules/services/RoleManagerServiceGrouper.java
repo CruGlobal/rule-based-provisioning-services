@@ -16,7 +16,7 @@ public class RoleManagerServiceGrouper implements RoleManagerService
     private String roleBasePath;
     protected boolean convertRoleNames = true;
     
-    public RoleManagerServiceGrouper(String attestorId, String roleBasePath, boolean convertRoleNames)
+   public RoleManagerServiceGrouper(String attestorId, String roleBasePath, boolean convertRoleNames)
     {
         super();
         this.attestorId = attestorId;
@@ -28,7 +28,7 @@ public class RoleManagerServiceGrouper implements RoleManagerService
     public Collection<RoleAssignment> findExistingAssignedRoles(String globalId) throws Exception
     {
         GrouperDao dao = new GrouperDaoImpl(attestorId);
-        Set<GrouperMembership> memberships = dao.getMemberships(globalId, roleBasePath);
+        Set<GrouperMembership> memberships = dao.getAllMembershipsWithinFolder(globalId, roleBasePath);
         Collection<RoleAssignment> assignments = new ArrayList<RoleAssignment>();
         for (GrouperMembership m : memberships)
         {

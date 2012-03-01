@@ -2,8 +2,8 @@ package org.ccci.idm.rules.test;
 
 import java.util.Date;
 
-import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
 import org.ccci.idm.rules.services.RoleManagerServiceGrouper;
+import org.ccci.idm.rules.services.RuleBasedRoleProvisioningService;
 import org.ccci.soa.obj.USEmployment;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class ComputeSiebelAccessGroupsDemo
     @Test
     public void basicDemo() throws Exception
     {
-      RuleBasedRoleProvisioningProcess svc = new RuleBasedRoleProvisioningProcess(new RoleManagerServiceGrouper("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel:access_groups", true));
+      RuleBasedRoleProvisioningService svc = new RuleBasedRoleProvisioningService(new RoleManagerServiceGrouper("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel:access_groups", true));
       svc.addExcelRuleset("SiebelAccessGroupProvisioningRules.xls", "Sheet1");
       USEmployment e = new USEmployment();
       

@@ -18,8 +18,8 @@ import org.ccci.idm.dao.IdentityDAO;
 import org.ccci.idm.dao.impl.IdentityDAOLDAPImpl;
 import org.ccci.idm.obj.IdentityUser;
 import org.ccci.idm.rules.obj.EmployeeInfo;
-import org.ccci.idm.rules.processes.RuleBasedRoleProvisioningProcess;
 import org.ccci.idm.rules.services.RoleManagerServiceGrouper;
+import org.ccci.idm.rules.services.RuleBasedRoleProvisioningService;
 import org.ccci.soa.pshr.client.StaffService;
 import org.ccci.soa.pshr.client.StaffServiceService;
 import org.ccci.soa.pshr.client.UsStaffMember;
@@ -32,7 +32,7 @@ public class StellentRuleProvSvc
     private AuthenticationManager authenticationManager;
     private Properties properties;
     
-	private RuleBasedRoleProvisioningProcess stellentRuleProc;
+	private RuleBasedRoleProvisioningService stellentRuleProc;
 	private StaffService service;
 	private String serviceServerId;
 	private String serviceServerSecret;
@@ -51,7 +51,7 @@ public class StellentRuleProvSvc
         //setupStaffServiceClient();
 	}
 
-	public StellentRuleProvSvc(RuleBasedRoleProvisioningProcess stellentRuleProc, StaffService service)
+	public StellentRuleProvSvc(RuleBasedRoleProvisioningService stellentRuleProc, StaffService service)
 	{
 		super();
 		this.stellentRuleProc = stellentRuleProc;
@@ -96,7 +96,7 @@ public class StellentRuleProvSvc
 
     private void setupRules()
     {
-        stellentRuleProc = new RuleBasedRoleProvisioningProcess(new RoleManagerServiceGrouper(properties.getProperty("attestationUser"), properties.getProperty("grouperBase"), false));
+        stellentRuleProc = new RuleBasedRoleProvisioningService(new RoleManagerServiceGrouper(properties.getProperty("attestationUser"), properties.getProperty("grouperBase"), false));
         stellentRuleProc.addDrlRuleset("classpath:StaffWebAccess.drl");
     }
 

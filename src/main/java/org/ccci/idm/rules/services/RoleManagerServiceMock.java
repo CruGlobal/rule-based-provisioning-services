@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.ccci.idm.obj.RoleAssignment;
+import org.ccci.idm.rules.services.rolemanager.RoleManagerFactoryMock;
 import org.ccci.util.NkUtil;
 
 public class RoleManagerServiceMock implements RoleManagerService
@@ -14,6 +15,8 @@ public class RoleManagerServiceMock implements RoleManagerService
     Collection<RoleAssignment> currentRoles = new ArrayList<RoleAssignment>();
     private boolean convertRoleNames;
     private String roleBasePath;
+    
+    private RoleManagerFactoryMock factory;
     
     
     public RoleManagerServiceMock(String attestorId)
@@ -28,6 +31,15 @@ public class RoleManagerServiceMock implements RoleManagerService
         this.roleBasePath = roleBasePath;
         this.convertRoleNames = convertRoleNames;
     }
+
+    public RoleManagerServiceMock(String attestorId, String roleBasePath, boolean convertRoleNames,
+                                  RoleManagerFactoryMock factory)
+    {
+        this(attestorId,roleBasePath,convertRoleNames);
+        this.factory = factory;
+    }
+
+    
 
     public void reset(boolean resetCurrent)
     {
@@ -55,6 +67,7 @@ public class RoleManagerServiceMock implements RoleManagerService
     public void assignRoleToPerson(RoleAssignment r) throws Exception
     {
         addedRoles.add(r);
+        if(factory!=null) factory.getAddedRoles().add(r);
         currentRoles.add(r);
     }
 
@@ -62,6 +75,7 @@ public class RoleManagerServiceMock implements RoleManagerService
     public void removeRoleFromPerson(RoleAssignment r) throws Exception
     {
         removedRoles.add(r);
+        if(factory!=null) factory.getRemovedRoles().add(r);
         for(RoleAssignment r2 : currentRoles)
         {
             if(r2.matches(r))
