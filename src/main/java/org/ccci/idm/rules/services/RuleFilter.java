@@ -15,7 +15,7 @@ public class RuleFilter
             if(!rulesets.contains(svc.getName())) return false;
         }
         
-        if(rulesets==null || rulesets.size()==0) return true;
+        if(changedFacts==null || changedFacts.size()==0) return true;
         
         for(String requiredFact : svc.getRequiredFacts())
         {
