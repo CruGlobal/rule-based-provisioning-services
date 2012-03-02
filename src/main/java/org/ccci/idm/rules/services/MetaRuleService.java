@@ -94,9 +94,10 @@ public class MetaRuleService
         return svc;
     }
 
-    public void runRules(IdentityDAO identityDao, String ssoGuid, RuleFilter ruleFilter) throws Exception
+    public void runRules(IdentityDAO identityDao, String ssoGuidOrUsername, RuleFilter ruleFilter) throws Exception
     {
-        IdentityUser identityUser = identityDao.loadBySsoGuid(ssoGuid);
+        IdentityUser identityUser = identityDao.loadBySsoGuidOrUsername(ssoGuidOrUsername);
+        if(identityUser==null) throw new RuntimeException("User not found for "+ssoGuidOrUsername);
         
         for(RuleBasedRoleProvisioningService svc : ruleServices)
         {
@@ -104,7 +105,7 @@ public class MetaRuleService
             {
                 List<Object> facts = loadFactsForRuleset(identityUser, svc);
                 
-                svc.computeAndApplyRolesForUser(ssoGuid, new Date(), facts.toArray());
+                svc.computeAndApplyRolesForUser(identityUser.getAccount().getCn(), new Date(), facts.toArray());
             }
         }
     }

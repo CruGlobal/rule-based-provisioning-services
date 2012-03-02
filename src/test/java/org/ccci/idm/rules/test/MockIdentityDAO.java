@@ -37,12 +37,12 @@ public class MockIdentityDAO implements IdentityDAO
     }
 
     @Override
-    public IdentityUser loadBySsoGuid(String ssoguid) throws Exception
+    public IdentityUser loadBySsoGuidOrUsername(String ssoGuidOrUsername) throws Exception
     {
         IdentityUser user = new IdentityUser();
         user.getEmployee().setEmployeeId("000123456");
-        user.getAccount().setSsoguid(ssoguid);
-        user.getAccount().setCn(ssoguid);
+        user.getAccount().setSsoguid(ssoGuidOrUsername);
+        user.getAccount().setCn(ssoGuidOrUsername);
         user.getAccount().setUsername("test.user@ccci.org");
         user.getDesignation().setDesignationId("0123456");
         return user;

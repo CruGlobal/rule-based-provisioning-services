@@ -78,8 +78,9 @@ public class RuleBasedRoleProvisioningService
         super();
         this.roleManager = roleManager;
         kbase = KnowledgeBaseFactory.newKnowledgeBase();
-        ResourceFactory.getResourceChangeNotifierService().start();
-        ResourceFactory.getResourceChangeScannerService().start();
+        // if these are started, tomcat won't shut down cleanly.  if we start them, we need to also be sure to stop them somehow
+//        ResourceFactory.getResourceChangeNotifierService().start();
+//        ResourceFactory.getResourceChangeScannerService().start();
     }
     
     public synchronized void addRequiredFact(String factName)
@@ -107,7 +108,7 @@ public class RuleBasedRoleProvisioningService
         System.out.println("role assignments: "+newAssignments.size());
         for(RoleAssignment r : newAssignments)
         {
-            System.out.println("role assignment: "+r.getAssigneeId()+" to "+r.getRoleId());
+            System.out.println("role assignment: "+r.getAssigneeId()+" to "+r.getRoleId()+" is new? "+!r.getExisting());
         }
         
         applyRoleAssignments(newAssignments, allExistingAssignments);
@@ -274,7 +275,10 @@ public class RuleBasedRoleProvisioningService
         for (RoleAssignment assignment : allExistingAssignments)
         {
             if (!thisIsAttestor(assignment))
+            {
                 externalAssignments.add(assignment);
+                System.out.println("detected external assignment: "+assignment.getRoleId()+" assigned by "+assignment.getAttestorId());
+            }
         }
         return externalAssignments;
     }
