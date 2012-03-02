@@ -168,7 +168,7 @@ public class RuleBasedRoleProvisioningService
     private List<RoleAssignment> computeNewRoleAssignments(String ssoGuid,  Collection<RoleAssignment> externalExistingAssignments, Date now, Object... facts)
     {
         StatefulKnowledgeSession ksession = setupRulesSession(kbase, externalExistingAssignments, now, facts);
-
+        
         ksession.fireAllRules();
         
         List<RoleAssignment> newAssignments = extractRoleAssignmentsFromSession(ksession);
@@ -238,7 +238,7 @@ public class RuleBasedRoleProvisioningService
     {
         StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
         
-        ksession.setGlobal("now", now);
+        setGlobals(now, ksession);
 
         for(Object fact : facts)
         {
@@ -250,6 +250,21 @@ public class RuleBasedRoleProvisioningService
             FactHandle roleHandle = ksession.insert(role);
         }
         return ksession;
+    }
+
+    private void setGlobals(Date now, StatefulKnowledgeSession ksession)
+    {
+        ksession.getGlobals().set("now", now);
+//        ksession.getGlobals().get(identifier);
+//        try
+//        {
+//            ksession.setGlobal("now", now);
+//        }
+//        catch(RuntimeException e)
+//        {
+//            // if the ruleset doesn't declare the global, we're not allowed to set it and we'll get a null pointer exception
+//            if(!e.getMessage().startsWith("Unexpected global")) throw e;
+//        }
     }
 
 

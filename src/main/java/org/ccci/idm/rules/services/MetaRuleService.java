@@ -82,7 +82,7 @@ public class MetaRuleService
             }
             else if(ruleFileLC.endsWith(".xls"))
             {
-                String[] sheets = commaListToArray(properties.getProperty(ruleset+"."+ruleFile+".sheets"));
+                String[] sheets = commaListToArray(properties.getProperty(ruleset+"."+ruleFile.replace(':','_')+".sheets"));
                 svc.addExcelRuleset(ruleFile, sheets);
             }
         }
@@ -94,15 +94,18 @@ public class MetaRuleService
         return svc;
     }
 
-    public void runRules(IdentityDAO identityDao, String ssoGuid) throws Exception
+    public void runRules(IdentityDAO identityDao, String ssoGuid, RuleFilter ruleFilter) throws Exception
     {
         IdentityUser identityUser = identityDao.loadBySsoGuid(ssoGuid);
         
         for(RuleBasedRoleProvisioningService svc : ruleServices)
         {
-            List<Object> facts = loadFactsForRuleset(identityUser, svc);
-            
-            svc.computeAndApplyRolesForUser(ssoGuid, new Date(), facts.toArray());
+            if(ruleFilter==null || ruleFilter.serviceMatches(svc))
+            {
+                List<Object> facts = loadFactsForRuleset(identityUser, svc);
+                
+                svc.computeAndApplyRolesForUser(ssoGuid, new Date(), facts.toArray());
+            }
         }
     }
 

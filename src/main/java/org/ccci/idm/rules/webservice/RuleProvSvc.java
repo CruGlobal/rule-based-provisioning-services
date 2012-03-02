@@ -13,6 +13,7 @@ import org.ccci.idm.authentication.manager.impl.AuthenticationManagerImpl;
 import org.ccci.idm.dao.IdentityDAO;
 import org.ccci.idm.dao.impl.IdentityDAOLDAPImpl;
 import org.ccci.idm.rules.services.MetaRuleService;
+import org.ccci.idm.rules.services.RuleFilter;
 import org.ccci.idm.rules.services.rolemanager.RoleManagerFactoryGrouper;
 import org.ccci.util.properties.CcciProperties.PropertyEncryptionSetup;
 import org.ccci.util.properties.PropertiesWithFallback;
@@ -33,7 +34,7 @@ public class RuleProvSvc
 	}
 	
     @WebMethod(operationName = "runRules")
-    public String runRules(@WebParam(name = "serverId") String serverId, @WebParam(name = "serverSecret") String serverSecret, @WebParam(name = "ssoGuid") String ssoGuid) throws Exception
+    public String runRules(@WebParam(name = "serverId") String serverId, @WebParam(name = "serverSecret") String serverSecret, @WebParam(name = "ssoGuid") String ssoGuid, @WebParam(name = "ruleFilter") RuleFilter ruleFilter) throws Exception
     {
         authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
 
@@ -42,7 +43,7 @@ public class RuleProvSvc
         IdentityDAO identityDao = new IdentityDAOLDAPImpl(properties.getProperty("ldapUrl"));
         try
         {
-            service.runRules(identityDao, ssoGuid);
+            service.runRules(identityDao, ssoGuid, ruleFilter);
             return "done";
         }
         finally
