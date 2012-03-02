@@ -7,4 +7,7 @@
 	<endpoint name="StaffWebRuleRuleProvWebService"
 		implementation="org.ccci.idm.rules.webservice.StaffWebRuleProvSvc"
 		url-pattern="/staffweb" />
+	<endpoint name="RuleProvWebService"
+		implementation="org.ccci.idm.rules.webservice.RuleProvSvc"
+		url-pattern="/rules" />
 </endpoints>
