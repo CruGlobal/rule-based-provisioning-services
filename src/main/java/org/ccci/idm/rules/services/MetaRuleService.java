@@ -100,22 +100,31 @@ public class MetaRuleService
         
         for(RuleBasedRoleProvisioningService svc : ruleServices)
         {
-            List<Object> facts = new ArrayList<Object>();
-            facts.add(identityUser);
+            List<Object> facts = loadFactsForRuleset(identityUser, svc);
             
-            for(String fact : svc.getRequiredFacts())
-            {
-                for(FactProvider prov : factProviders)
-                {
-                    if(prov.getFactName().equals(fact))
-                    {
-                        facts.add(prov.getFact(identityUser));
-                        break;
-                    }
-                }
-            }
             svc.computeAndApplyRolesForUser(ssoGuid, new Date(), facts.toArray());
         }
+    }
+
+    private List<Object> loadFactsForRuleset(IdentityUser identityUser, RuleBasedRoleProvisioningService svc)
+    {
+        List<Object> facts = new ArrayList<Object>();
+        facts.add(identityUser);
+        
+        for(String fact : svc.getRequiredFacts())
+        {
+            if(fact.equals("IdentityUser")) continue;
+            
+            for(FactProvider prov : factProviders)
+            {
+                if(prov.getFactName().equals(fact))
+                {
+                    facts.add(prov.getFact(identityUser));
+                    break;
+                }
+            }
+        }
+        return facts;
     }
 
     private String[] commaListToArray(String str)

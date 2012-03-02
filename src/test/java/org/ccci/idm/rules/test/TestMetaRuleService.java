@@ -19,8 +19,9 @@ public class TestMetaRuleService
         props.setProperty("rulesets", "stellent");
         props.setProperty("stellent.attestationUser", "stellent.rules@ccci.org");
         props.setProperty("stellent.grouperBase", "ccci:itroles:uscore:stellent");
-        props.setProperty("stellent.rulefiles", "classpath:StaffWebAccess.drl");
-        props.setProperty("stellent.facts", "EmployeeInfo");
+        props.setProperty("stellent.rulefiles", "classpath:StaffWebAccess.drl, classpath:StellentRules.xls");
+        props.setProperty("stellent.classpath:StellentRules.xls.sheets", "Sheet1");
+        props.setProperty("stellent.facts", "EmployeeInfo, IdentityUser");
         
         RoleManagerFactoryMock factory = new RoleManagerFactoryMock();
         
