@@ -49,7 +49,7 @@ $Id: sources.example.xml,v 1.8 2009/08/11 20:18:09 mchyzer Exp $
     </init-param>
     <init-param>
       <param-name>SECURITY_PRINCIPAL</param-name>
-      <param-value>cn=B3712AFF-88C6-A4B8-6F50-A2E4C4C6A241,cn=sso,dc=mygcx,dc=org</param-value>
+      <<param-value>cn=B3712AFF-88C6-A4B8-6F50-A2E4C4C6A241,cn=sso,dc=mygcx,dc=org</param-value>
     </init-param>
     <init-param>
       <param-name>SECURITY_CREDENTIALS</param-name>
@@ -67,7 +67,7 @@ $Id: sources.example.xml,v 1.8 2009/08/11 20:18:09 mchyzer Exp $
     </init-param>
     <init-param>
       <param-name>SECURITY_CREDENTIALS</param-name>
-      <param-value>wCRp8v4TT5PAQb8GlObU</param-value>
+      <param-value>password-goes-here</param-value>
     </init-param>
      -->
     <!-- ====================================== -->
