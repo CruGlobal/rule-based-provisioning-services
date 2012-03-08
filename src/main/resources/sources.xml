@@ -43,6 +43,7 @@ $Id: sources.example.xml,v 1.8 2009/08/11 20:18:09 mchyzer Exp $
     </init-param>
      -->
     <!-- ================== TEST ===================== -->
+    <!-- 
     <init-param>
       <param-name>PROVIDER_URL</param-name>
       <param-value>ldap://oidtst.ccci.org:389</param-value>
@@ -55,8 +56,8 @@ $Id: sources.example.xml,v 1.8 2009/08/11 20:18:09 mchyzer Exp $
       <param-name>SECURITY_CREDENTIALS</param-name>
       <param-value>Grouper1</param-value>
     </init-param>
+     -->
     <!-- ================== PROD ===================== -->
-    <!-- 
     <init-param>
       <param-name>PROVIDER_URL</param-name>
       <param-value>ldap://oid.ccci.org:389</param-value>
@@ -67,9 +68,8 @@ $Id: sources.example.xml,v 1.8 2009/08/11 20:18:09 mchyzer Exp $
     </init-param>
     <init-param>
       <param-name>SECURITY_CREDENTIALS</param-name>
-      <param-value>wCRp8v4TT5PAQb8GlObU</param-value>
+      <param-value>xd9s8kdlk7891qp8d7wb</param-value>
     </init-param>
-     -->
     <!-- ====================================== -->
     <init-param>
       <param-name>SECURITY_AUTHENTICATION</param-name>

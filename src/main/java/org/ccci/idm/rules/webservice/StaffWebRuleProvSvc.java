@@ -80,7 +80,7 @@ public class StaffWebRuleProvSvc
 
     private void setupRules()
     {
-        ruleBasedStaffWebProvisioningService = new RuleBasedRoleProvisioningService(new RoleManagerServiceGrouper("staffweb.responsibility.rules@ccci.org", "", false));
+        ruleBasedStaffWebProvisioningService = new RuleBasedRoleProvisioningService(new RoleManagerServiceGrouper("stellent.rules@ccci.org", "", false));
         ruleBasedStaffWebProvisioningService.addDrlRuleset("classpath:StaffWebAccess-v3.drl");
     }
 
