@@ -6,6 +6,21 @@
 	<listener>
 		<listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
 	</listener>
+	
+	<!-- 
+	<servlet>
+		<servlet-name>log4j-init</servlet-name>
+		<servlet-class>org.ccci.servlet.Log4jInit</servlet-class>
+	
+		<init-param>
+			<param-name>log4j-init-file</param-name>
+			<param-value>/apps/apps-config/rule-services-log4j.properties</param-value>
+		</init-param>
+	
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	 -->	
+	
 	<servlet>
 		<servlet-name>jax-ws</servlet-name>
 		<servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
