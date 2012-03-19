@@ -196,14 +196,15 @@ public class RuleBasedRoleProvisioningService
                     // keep the one attested by us
                     if(!thisIsAttestor(alreadySelected) && thisIsAttestor(newOne))
                     {
-                        // swap - keep
+                        // swap - remove the old one and we'll add the new one
                         output.remove(alreadySelected);
-                        output.add(newOne);
-                        break; // to avoid exception caused by remove()
+                        break;
                     }
                     else
                     {
+                        // we want to keep the one we found, so break out now and don't add the new one
                         shouldAdd = false;
+                        break;
                     }
                 }
             }
