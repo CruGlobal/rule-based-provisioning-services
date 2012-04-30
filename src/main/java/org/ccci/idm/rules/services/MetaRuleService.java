@@ -25,11 +25,12 @@ public class MetaRuleService
 		this.roleManagerFactory = roleManagerFactory;
 	}
 	
-	public void setupDefaultIfNecessary() throws Exception
+	public synchronized void setupDefaultIfNecessary() throws Exception
 	{
 	    if(setupComplete) return;
 	    setupDefaultFactProviders();
         setupRuleServices();
+        setupComplete = true;
 	}
 	
     public void setupDefaultFactProviders() throws Exception

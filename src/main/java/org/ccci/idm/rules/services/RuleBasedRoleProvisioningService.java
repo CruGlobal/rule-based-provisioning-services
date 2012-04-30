@@ -138,6 +138,8 @@ public class RuleBasedRoleProvisioningService
             {
                 // it now matches the rules, so let's replace to claim attestation
                 roleManager.removeRoleFromPerson(newOne);
+                // need to make sure that timestamps show a difference between removal and addition, so changelog sorting happens properly!!!
+                synchronized(this) {this.wait(1100);}
                 roleManager.assignRoleToPerson(newOne);
             }
             else if(!NkUtil.equal(found.getExpiration(),newOne.getExpiration()))
