@@ -11,7 +11,7 @@ import org.ccci.idm.authentication.handler.impl.PropertyBasedUsernamePasswordAut
 import org.ccci.idm.authentication.manager.AuthenticationManager;
 import org.ccci.idm.authentication.manager.impl.AuthenticationManagerImpl;
 import org.ccci.idm.dao.IdentityDAO;
-import org.ccci.idm.dao.impl.IdentityDAOLDAPImpl2;
+import org.ccci.idm.dao.impl.IdentityDAOLDAPADImpl;
 import org.ccci.idm.rules.services.MetaRuleService;
 import org.ccci.idm.rules.services.RuleFilter;
 import org.ccci.idm.rules.services.rolemanager.RoleManagerFactoryGrouper;
@@ -40,7 +40,7 @@ public class RuleProvSvc
 
         service.setupDefaultIfNecessary();
 
-        IdentityDAO identityDao = new IdentityDAOLDAPImpl2(properties.getProperty("ldapUrl"),properties.getProperty("ldapUser"),properties.getProperty("ldapPassword"));
+        IdentityDAO identityDao = new IdentityDAOLDAPADImpl(properties.getProperty("ldapUrl"),properties.getProperty("ldapUser"),properties.getProperty("ldapPassword"));
         try
         {
             service.runRules(identityDao, ssoGuid, ruleFilter);
