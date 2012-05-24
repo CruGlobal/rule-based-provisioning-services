@@ -9,10 +9,10 @@ public class MockIdentityDAO implements IdentityDAO
 {
 
     @Override
-    public void save(IdentityUser identityUser) throws Exception
+    public boolean save(IdentityUser identityUser) throws Exception
     {
         // TODO Auto-generated method stub
-
+        return true;
     }
 
     @Override

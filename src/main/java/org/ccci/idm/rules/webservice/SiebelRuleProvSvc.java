@@ -19,6 +19,7 @@ import org.ccci.idm.rules.services.RuleBasedRoleProvisioningService;
 import org.ccci.soa.pshr.client.StaffService;
 import org.ccci.soa.pshr.client.StaffServiceService;
 import org.ccci.soa.pshr.client.UsStaffMember;
+import org.ccci.util.mail.ErrorEmailer;
 import org.ccci.util.properties.CcciProperties.PropertyEncryptionSetup;
 import org.ccci.util.properties.PropertiesWithFallback;
 
@@ -37,15 +38,17 @@ public class SiebelRuleProvSvc
 	public SiebelRuleProvSvc() throws Exception
 	{
 		super();
-		System.out.println("SiebelRuleProvSvc.setupProperties");
-		setupProperties();
-		System.out.println("SiebelRuleProvSvc.setupAuthenticationManager");
-		setupAuthenticationManager();
-		System.out.println("SiebelRuleProvSvc.setupRules");
-		setupRules();
-		System.out.println("SiebelRuleProvSvc.setupStaffServiceClient");
-		setupStaffServiceClient();
-		System.out.println("SiebelRuleProvSvc done");
+		try
+		{
+    		setupProperties();
+    		setupAuthenticationManager();
+    		setupRules();
+    		setupStaffServiceClient();
+        }
+        catch(Throwable t)
+        {
+            throw ErrorEmailer.sendErrorToAdmin(properties, t);
+        }
 	}
 
 	public SiebelRuleProvSvc(RuleBasedRoleProvisioningService ruleBasedResponsibilityProvisioningService, RuleBasedRoleProvisioningService ruleBasedAccessGroupProvisioningService)
@@ -60,20 +63,34 @@ public class SiebelRuleProvSvc
 	public String provisionSiebelResponsibilityAccessForEmployee(@WebParam(name = "serverId") String serverId, @WebParam(name = "serverSecret") String serverSecret, @WebParam(name = "ssoGuid") String ssoGuid, @WebParam(name = "emplid") String emplid) throws Exception
 	{
 	    authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
-	    UsStaffMember staff = service.getStaff(serviceServerId, serviceServerSecret, emplid);
-	    if(staff==null) throw new RuntimeException("Emplid is not valid.");
-		ruleBasedResponsibilityProvisioningService.computeAndApplyRolesForUser(ssoGuid, new Date(), staff.getEmploymentInfo());
-		return null;
+	    try
+	    {
+    	    UsStaffMember staff = service.getStaff(serviceServerId, serviceServerSecret, emplid);
+    	    if(staff==null) throw new RuntimeException("Emplid is not valid.");
+    		ruleBasedResponsibilityProvisioningService.computeAndApplyRolesForUser(ssoGuid, new Date(), staff.getEmploymentInfo());
+    		return null;
+	    }
+	    catch(Throwable t)
+	    {
+	        throw ErrorEmailer.sendErrorToAdmin(properties, t);
+	    }
 	}
 
 	@WebMethod(operationName = "provisionSiebelAccessGroupAccessForEmployee")
 	public String provisionSiebelAccessGroupAccessForEmployee(@WebParam(name = "serverId") String serverId, @WebParam(name = "serverSecret") String serverSecret, @WebParam(name = "ssoGuid") String ssoGuid, @WebParam(name = "emplid") String emplid) throws Exception
 	{
 	    authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
-	    UsStaffMember staff = service.getStaff(serviceServerId, serviceServerSecret, emplid);
-	    if(staff==null) throw new RuntimeException("Emplid is not valid.");
-		ruleBasedAccessGroupProvisioningService.computeAndApplyRolesForUser(ssoGuid, new Date(), staff.getEmploymentInfo());
-		return null;
+	    try
+	    {
+    	    UsStaffMember staff = service.getStaff(serviceServerId, serviceServerSecret, emplid);
+    	    if(staff==null) throw new RuntimeException("Emplid is not valid.");
+    		ruleBasedAccessGroupProvisioningService.computeAndApplyRolesForUser(ssoGuid, new Date(), staff.getEmploymentInfo());
+    		return null;
+        }
+        catch(Throwable t)
+        {
+            throw ErrorEmailer.sendErrorToAdmin(properties, t);
+        }
 	}
 	
 	

@@ -1,5 +1,7 @@
 package org.ccci.idm.rules.webservice;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Properties;
 
 import javax.jws.WebMethod;
@@ -15,6 +17,10 @@ import org.ccci.idm.dao.impl.IdentityDAOLDAPADImpl;
 import org.ccci.idm.rules.services.MetaRuleService;
 import org.ccci.idm.rules.services.RuleFilter;
 import org.ccci.idm.rules.services.rolemanager.RoleManagerFactoryGrouper;
+import org.ccci.util.mail.EmailAddress;
+import org.ccci.util.mail.ErrorEmailer;
+import org.ccci.util.mail.MailMessage;
+import org.ccci.util.mail.MailMessageFactory;
 import org.ccci.util.properties.CcciProperties.PropertyEncryptionSetup;
 import org.ccci.util.properties.PropertiesWithFallback;
 
@@ -34,7 +40,7 @@ public class RuleProvSvc
 	}
 	
     @WebMethod(operationName = "runRules")
-    public String runRules(@WebParam(name = "serverId") String serverId, @WebParam(name = "serverSecret") String serverSecret, @WebParam(name = "ssoGuid") String ssoGuid, @WebParam(name = "ruleFilter") RuleFilter ruleFilter) throws Exception
+    public String runRules(@WebParam(name = "serverId") String serverId, @WebParam(name = "serverSecret") String serverSecret, @WebParam(name = "ssoGuid") String ssoGuid, @WebParam(name = "ruleFilter") RuleFilter ruleFilter) throws Throwable
     {
         authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
 
@@ -46,11 +52,18 @@ public class RuleProvSvc
             service.runRules(identityDao, ssoGuid, ruleFilter);
             return "done";
         }
+        catch(Throwable e)
+        {
+            ErrorEmailer.sendErrorToAdmin(properties, e);
+            e.printStackTrace();
+            throw e;
+        }
         finally
         {
             identityDao.close();
         }
     }
+    
     
     private void loadProperties()
     {

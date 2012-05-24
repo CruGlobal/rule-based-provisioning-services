@@ -19,8 +19,8 @@ import org.ccci.idm.rules.services.RoleManagerServiceGrouper;
 import org.ccci.idm.rules.services.RuleBasedRoleProvisioningService;
 import org.ccci.soa.pshr.client.StaffService;
 import org.ccci.soa.pshr.client.StaffServiceService;
-import org.ccci.soa.pshr.client.UsEmployeeInfo;
 import org.ccci.soa.pshr.client.UsStaffMember;
+import org.ccci.util.mail.ErrorEmailer;
 import org.ccci.util.properties.CcciProperties.PropertyEncryptionSetup;
 import org.ccci.util.properties.PropertiesWithFallback;
 
@@ -39,9 +39,16 @@ public class StaffWebRuleProvSvc
 	public StaffWebRuleProvSvc() throws Exception
 	{
 		super();
-		setupProperties();
-        setupAuthenticationManager();
-        setupRules();
+		try
+		{
+    		setupProperties();
+            setupAuthenticationManager();
+            setupRules();
+        }
+        catch(Throwable t)
+        {
+            throw ErrorEmailer.sendErrorToAdmin(properties, t);
+        }
         // WARNING: we can't call setupStaffServiceClient() in the constructor if this is deployed in the same
         // container as the StaffServiceClient!  If so, it will create a deadlock, since tomcat doesn't start
         // listening on the port until all web apps have loaded, and this function will block until tomcat starts
@@ -60,15 +67,21 @@ public class StaffWebRuleProvSvc
     public String provisionStaffWebConsumerForEmployee(@WebParam(name = "serverId") String serverId, @WebParam(name = "serverSecret") String serverSecret, @WebParam(name = "ssoGuid") String ssoGuid, @WebParam(name = "emplid") String emplid) throws Exception
     {
         authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
-        
-        setupStaffServiceClientIfNecessary();
-        
-        UsStaffMember staff = service.getStaff(serviceServerId, serviceServerSecret, emplid);
-        
-        if(staff==null) throw new RuntimeException("Emplid is not valid.");
-        ruleBasedStaffWebProvisioningService.computeAndApplyRolesForUser(ssoGuid, new Date(), new EmployeeInfo(staff.getEmploymentInfo()));
-
-        return "done";
+        try
+        {
+            setupStaffServiceClientIfNecessary();
+            
+            UsStaffMember staff = service.getStaff(serviceServerId, serviceServerSecret, emplid);
+            
+            if(staff==null) throw new RuntimeException("Emplid is not valid.");
+            ruleBasedStaffWebProvisioningService.computeAndApplyRolesForUser(ssoGuid, new Date(), new EmployeeInfo(staff.getEmploymentInfo()));
+    
+            return "done";
+        }
+        catch(Throwable t)
+        {
+            throw ErrorEmailer.sendErrorToAdmin(properties, t);
+        }
     }
     
     

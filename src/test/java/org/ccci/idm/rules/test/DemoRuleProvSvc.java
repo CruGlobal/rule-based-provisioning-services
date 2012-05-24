@@ -5,7 +5,7 @@ import org.ccci.idm.rules.webservice.RuleProvSvc;
 
 public class DemoRuleProvSvc
 {
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args) throws Throwable
     {
         RuleProvSvc service = new RuleProvSvc();
         try
