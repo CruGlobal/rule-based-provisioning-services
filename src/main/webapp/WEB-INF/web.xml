@@ -34,10 +34,6 @@
 	 -->
 	<servlet-mapping>
 		<servlet-name>jax-ws</servlet-name>
-		<url-pattern>/staffweb</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>jax-ws</servlet-name>
 		<url-pattern>/rules</url-pattern>
 	</servlet-mapping>
 	<session-config>
