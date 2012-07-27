@@ -14,9 +14,9 @@ function Date addDaysToDates(Date termDate, int graceDays)
     return termDatePlusGrace;
 }
 
-function boolean isActiveOrLeave(String status)
+function boolean isActiveOrLeaveOrPartTime(String status)
 {
-	return ("A".equals(status) || "L".equals(status));
+	return ("A".equals(status) || "L".equals(status) || "P".equals(status));
 }
 
 declare ActiveGracePeriod
@@ -25,7 +25,7 @@ end
 
 rule "ActivateGracePeriodForStaff"
 	when
-		EmployeeInfo( emplStatus != "A" && emplStatus != "L",
+		EmployeeInfo( !isActiveOrLeaveOrPartTime(emplStatus),
 					  paygroup in ("USS", "INT", "RCE", "SAL", "HFT", "HPT"),
 					  $endDate : addDaysToDates(termDateAsDate, 90)>=now)
 	then
@@ -34,7 +34,7 @@ end
 
 rule "ActivateGracePeriodForInterns"
 	when
-		EmployeeInfo( emplStatus != "A" && emplStatus != "L",
+		EmployeeInfo( !isActiveOrLeaveOrPartTime(emplStatus),
 					  paygroup not in ("USS", "INT", "RCE", "SAL", "HFT", "HPT"),
 					  $endDate : addDaysToDates(termDateAsDate, 30)>=now)
 	then
@@ -43,14 +43,14 @@ end
 
 rule "EnableStaffWebConsumerWhenActive"
     when
-        EmployeeInfo( emplStatus == "A" || emplStatus == "L" )
+        EmployeeInfo( isActiveOrLeaveOrPartTime(emplStatus) )
     then
         insert(new RoleAssignment("roles:StaffOnlyConsumer"));
 end
 
 rule "WithinGracePeriod"
     when
-        EmployeeInfo( emplStatus != "A" && emplStatus != "L" )
+        EmployeeInfo( !isActiveOrLeaveOrPartTime(emplStatus) )
         ActiveGracePeriod($endDate : endDate)
     then
         insert(new RoleAssignment("roles:StaffOnlyConsumer", $endDate));
@@ -71,7 +71,7 @@ end
 This would remove manaully-asserted roles... so that wouldn't be good
 rule "RemoveManuallyAssignedStaffWebConsumer"
     when
-        EmployeeInfo( emplStatus != "A" && emplStatus != "L" )
+        EmployeeInfo( !isActiveOrLeaveOrPartTime(emplStatus) )
         not ActiveGracePeriod()
         r : RoleAssignment( roleId=="roles:StaffOnlyConsumer" )
     then
