@@ -75,7 +75,13 @@ public class RuleBasedRoleProvisioningService
 
     public RuleBasedRoleProvisioningService(RoleManagerService roleManager)
     {
+    	this(null, roleManager);
+    }
+    
+    public RuleBasedRoleProvisioningService(String name, RoleManagerService roleManager)
+    {
         super();
+        this.name = name;
         this.roleManager = roleManager;
         kbase = KnowledgeBaseFactory.newKnowledgeBase();
         // if these are started, tomcat won't shut down cleanly.  if we start them, we need to also be sure to stop them somehow
