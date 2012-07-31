@@ -53,6 +53,64 @@ public class StaffWebRulesTest
     }
 
     @Test
+    public void paidLeaveStaff() throws Exception
+    {
+        RoleManagerServiceMock svc = new RoleManagerServiceMock("stellent.rules@ccci.org");
+        RuleBasedRoleProvisioningService proc = new RuleBasedRoleProvisioningService(svc);
+        proc.addDrlRuleset("classpath:StaffWebAccess.drl");
+        
+        // ==============================================================
+        // initial setup
+        EmployeeInfo e = new EmployeeInfo(new UsEmployeeInfo());
+        e.setTermDate(null);
+        e.setPaygroup("USS");
+        e.setEmplStatus("P");
+
+        Date now = df.parse("1/1/2000");
+        proc.computeAndApplyRolesForUser("nathan.kopp@ccci.org", now, e);
+        
+        Assert.assertEquals(1, svc.getCurrentRoles().size());
+        Assert.assertEquals(1, svc.getAddedRoles().size());
+        Assert.assertEquals(0, svc.getRemovedRoles().size());
+        
+        RoleAssignment r = getRole(svc.getCurrentRoles(), "roles:StaffOnlyConsumer");
+        Assert.assertNotNull(r);
+        Assert.assertEquals("stellent.rules@ccci.org", r.getAttestorId().toLowerCase());
+        Assert.assertEquals("nathan.kopp@ccci.org", r.getAssigneeId().toLowerCase());
+        Assert.assertFalse(r.getExisting());
+        Assert.assertNull(r.getExpiration());
+    }
+
+    @Test
+    public void unpaidLeaveStaff() throws Exception
+    {
+        RoleManagerServiceMock svc = new RoleManagerServiceMock("stellent.rules@ccci.org");
+        RuleBasedRoleProvisioningService proc = new RuleBasedRoleProvisioningService(svc);
+        proc.addDrlRuleset("classpath:StaffWebAccess.drl");
+        
+        // ==============================================================
+        // initial setup
+        EmployeeInfo e = new EmployeeInfo(new UsEmployeeInfo());
+        e.setTermDate(null);
+        e.setPaygroup("USS");
+        e.setEmplStatus("L");
+
+        Date now = df.parse("1/1/2000");
+        proc.computeAndApplyRolesForUser("nathan.kopp@ccci.org", now, e);
+        
+        Assert.assertEquals(1, svc.getCurrentRoles().size());
+        Assert.assertEquals(1, svc.getAddedRoles().size());
+        Assert.assertEquals(0, svc.getRemovedRoles().size());
+        
+        RoleAssignment r = getRole(svc.getCurrentRoles(), "roles:StaffOnlyConsumer");
+        Assert.assertNotNull(r);
+        Assert.assertEquals("stellent.rules@ccci.org", r.getAttestorId().toLowerCase());
+        Assert.assertEquals("nathan.kopp@ccci.org", r.getAssigneeId().toLowerCase());
+        Assert.assertFalse(r.getExisting());
+        Assert.assertNull(r.getExpiration());
+    }
+
+    @Test
     public void terminatedWithinGracePeriod() throws Exception
     {
         RoleManagerServiceMock svc = new RoleManagerServiceMock("stellent.rules@ccci.org");
