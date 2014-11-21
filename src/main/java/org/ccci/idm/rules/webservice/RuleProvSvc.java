@@ -1,7 +1,5 @@
 package org.ccci.idm.rules.webservice;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Properties;
 
 import javax.jws.WebMethod;
@@ -13,14 +11,11 @@ import org.ccci.idm.authentication.handler.impl.PropertyBasedUsernamePasswordAut
 import org.ccci.idm.authentication.manager.AuthenticationManager;
 import org.ccci.idm.authentication.manager.impl.AuthenticationManagerImpl;
 import org.ccci.idm.dao.IdentityDAO;
-import org.ccci.idm.dao.impl.IdentityDAOLDAPADImpl;
+import org.ccci.idm.rules.services.IdentityDaoFactory;
 import org.ccci.idm.rules.services.MetaRuleService;
 import org.ccci.idm.rules.services.RuleFilter;
 import org.ccci.idm.rules.services.rolemanager.RoleManagerFactoryGrouper;
-import org.ccci.util.mail.EmailAddress;
 import org.ccci.util.mail.ErrorEmailer;
-import org.ccci.util.mail.MailMessage;
-import org.ccci.util.mail.MailMessageFactory;
 import org.ccci.util.properties.CcciProperties.PropertyEncryptionSetup;
 import org.ccci.util.properties.PropertiesWithFallback;
 
@@ -46,7 +41,8 @@ public class RuleProvSvc
 
         service.setupDefaultIfNecessary();
 
-        IdentityDAO identityDao = new IdentityDAOLDAPADImpl(properties.getProperty("ldapUrl"),properties.getProperty("ldapUser"),properties.getProperty("ldapPassword"));
+        IdentityDAO identityDao = IdentityDaoFactory.getInstance();
+
         try
         {
             service.runRules(identityDao, ssoGuid, ruleFilter);
