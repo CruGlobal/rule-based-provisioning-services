@@ -52,4 +52,8 @@ public class MockIdentityDAO implements IdentityDAO
         return user;
     }
 
+    @Override public void updateEmailVerified(IdentityUser identityUser) throws Exception
+    {
+        throw new RuntimeException("Not yet supported");
+    }
 }
