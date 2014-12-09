@@ -61,9 +61,8 @@ public class MetaRuleService
 
     private RuleBasedRoleProvisioningService loadRuleFromProperties(String ruleset)
     {
-        RoleManagerService roleManager = roleManagerFactory.construct(properties.getProperty(ruleset+".attestationUser"),
-                                                                      properties.getProperty(ruleset+".grouperBase"),
-                                                                      Boolean.valueOf(properties.getProperty(ruleset+".convertRoleNames")));
+        RoleManagerService roleManager = roleManagerFactory.construct(
+                properties.getProperty(ruleset+".attestationUser"), "", false);
         RuleBasedRoleProvisioningService svc = new RuleBasedRoleProvisioningService(ruleset, roleManager);
         String[] ruleFiles = commaListToArray(properties.getProperty(ruleset+".rulefiles"));
         for(String ruleFile : ruleFiles)
