@@ -20,6 +20,8 @@ import org.drools.io.Resource;
 import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.rule.FactHandle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This process runs a set of JBoss Drools rules and modifies the roles for a person based on
@@ -67,10 +69,12 @@ import org.drools.runtime.rule.FactHandle;
  */
 public class RuleBasedRoleProvisioningService
 {
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
     protected KnowledgeBase kbase;
     protected RoleManagerService roleManager;
     protected String name;
-    
+
     protected Set<String> requiredFacts;
 
     public RuleBasedRoleProvisioningService(RoleManagerService roleManager)
@@ -97,7 +101,7 @@ public class RuleBasedRoleProvisioningService
     
     /**
      * This is the primary entry point into the service.  This runs the rules engine and then
-     * applies the results to the user through the RoleManager past into the constructor.
+     * applies the results to the user through the RoleManager passed into the constructor.
      * 
      * @param ssoGuid - the single sign-on identifier of the user for whom we are computing roles.
      * @param now - the current date
@@ -106,20 +110,29 @@ public class RuleBasedRoleProvisioningService
      * @return
      * @throws Exception
      */
-    public String computeAndApplyRolesForUser(String ssoGuid, Date now, Object... facts) throws Exception    {
+    public String computeAndApplyRolesForUser(String ssoGuid, Date now, Object... facts) throws Exception
+    {
         Collection<RoleAssignment> allExistingAssignments = roleManager.findExistingAssignedRoles(ssoGuid);
         Collection<RoleAssignment> externalExistingAssignments = filterExistingRolesKeepExternal(allExistingAssignments);
         Collection<RoleAssignment> newAssignments = computeNewRoleAssignments(ssoGuid, externalExistingAssignments, now, facts);
-        
-        System.out.println("role assignments: "+newAssignments.size());
-        for(RoleAssignment r : newAssignments)
-        {
-            System.out.println("role assignment: "+r.getAssigneeId()+" to "+r.getRoleId()+" is new? "+!r.getExisting());
-        }
-        
+
+        logAssignments(allExistingAssignments, "allExistingAssignments ");
+        logAssignments(externalExistingAssignments, "externalExistingAssignments ");
+        logAssignments(newAssignments, "newAssignments ");
+
         applyRoleAssignments(newAssignments, allExistingAssignments);
 
         return null;
+    }
+
+    private void logAssignments(Collection<RoleAssignment> roleAssignments, String message)
+    {
+        logger.info(message + roleAssignments.size());
+        for(RoleAssignment roleAssignment : roleAssignments)
+        {
+            logger.info(message + roleAssignment.getAssigneeId() + " to " + roleAssignment.getRoleId() +
+                    " is new? " + !roleAssignment.getExisting());
+        }
     }
 
     private void applyRoleAssignments(Collection<RoleAssignment> newAssignments, Collection<RoleAssignment> allExistingAssignments) throws Exception
@@ -286,7 +299,8 @@ public class RuleBasedRoleProvisioningService
             if (!thisIsAttestor(assignment))
             {
                 externalAssignments.add(assignment);
-                System.out.println("detected external assignment: "+assignment.getRoleId()+" assigned by "+assignment.getAttestorId());
+                logger.info("detected external assignment: " + assignment.getRoleId() + " assigned by " + assignment
+                        .getAttestorId());
             }
         }
         return externalAssignments;
