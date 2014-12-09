@@ -14,7 +14,7 @@ import org.ccci.idm.dao.IdentityDAO;
 import org.ccci.idm.rules.services.IdentityDaoFactory;
 import org.ccci.idm.rules.services.MetaRuleService;
 import org.ccci.idm.rules.services.RuleFilter;
-import org.ccci.idm.rules.services.rolemanager.RoleManagerFactoryGrouper;
+import org.ccci.idm.rules.services.rolemanager.RoleManagerFactoryUserManager;
 import org.ccci.util.mail.ErrorEmailer;
 import org.ccci.util.properties.CcciProperties.PropertyEncryptionSetup;
 import org.ccci.util.properties.PropertiesWithFallback;
@@ -31,7 +31,7 @@ public class RuleProvSvc
 	{
 		loadProperties();
         setupAuthenticationManager();
-        service = new MetaRuleService(properties, new RoleManagerFactoryGrouper());
+        service = new MetaRuleService(properties, new RoleManagerFactoryUserManager());
 	}
 	
     @WebMethod(operationName = "runRules")
