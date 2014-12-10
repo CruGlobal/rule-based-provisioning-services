@@ -1,0 +1,8 @@
+target/
+.settings/
+.project
+test-output/
+src/main/db/logs/*
+
+.idea/
+*.iml
