@@ -8,9 +8,12 @@ import java.util.Properties;
 import org.ccci.idm.dao.IdentityDAO;
 import org.ccci.idm.obj.IdentityUser;
 import org.ccci.idm.rules.services.factprovider.EmployeeInfoProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MetaRuleService
 {
+    private Logger logger = LoggerFactory.getLogger(getClass());
     private Properties properties;
     private RoleManagerFactory roleManagerFactory;
     private List<RuleBasedRoleProvisioningService> ruleServices;
@@ -47,11 +50,13 @@ public class MetaRuleService
     
     public void setupRuleServices()
     {
+        logger.info("Setup rule services");
         ruleServices = new ArrayList<RuleBasedRoleProvisioningService>();
         
         String[] rulesets = commaListToArray(properties.getProperty("rulesets"));
         for(String ruleset : rulesets)
         {
+            logger.info("Setup rule services " + ruleset);
             RuleBasedRoleProvisioningService svc = loadRuleFromProperties(ruleset);
             ruleServices.add(svc);
         }
@@ -62,7 +67,7 @@ public class MetaRuleService
     private RuleBasedRoleProvisioningService loadRuleFromProperties(String ruleset)
     {
         RoleManagerService roleManager = roleManagerFactory.construct(
-                properties.getProperty(ruleset+".attestationUser"), "", false);
+                properties.getProperty(ruleset+".attestationUser"), properties.getProperty(ruleset+".base"), false);
         RuleBasedRoleProvisioningService svc = new RuleBasedRoleProvisioningService(ruleset, roleManager);
         String[] ruleFiles = commaListToArray(properties.getProperty(ruleset+".rulefiles"));
         for(String ruleFile : ruleFiles)
@@ -96,13 +101,21 @@ public class MetaRuleService
 
     public void runRules(IdentityDAO identityDao, String ssoGuidOrUsername, RuleFilter ruleFilter) throws Exception
     {
+        logger.info("Run rules " + ssoGuidOrUsername);
         IdentityUser identityUser = identityDao.loadBySsoGuidOrUsername(ssoGuidOrUsername);
         if(identityUser==null) throw new RuntimeException("User not found for "+ssoGuidOrUsername);
-        
+
+        logger.info("Run rules " + ssoGuidOrUsername + " rule services " + ruleServices.size());
+        logger.info("Run rules " + ssoGuidOrUsername + ", user " + identityUser.getAccount().getUsername());
+
         for(RuleBasedRoleProvisioningService svc : ruleServices)
         {
+            logger.info("Run rules " + ssoGuidOrUsername + ", svc " + svc.getName() + ", rule filter " +
+                    ruleFilter);
             if(ruleFilter==null || ruleFilter.serviceMatches(svc))
             {
+                logger.info("Run rules " + ssoGuidOrUsername + ", svc MATCHES " + svc.getName() + ", rule filter " +
+                        ruleFilter);
                 List<Object> facts = loadFactsForRuleset(identityUser, svc);
                 
                 svc.computeAndApplyRolesForUser(identityUser.getAccount().getCn(), new Date(), facts.toArray());
@@ -117,6 +130,7 @@ public class MetaRuleService
         
         for(String fact : svc.getRequiredFacts())
         {
+            logger.info("fact is " + fact);
             if(fact.equals("IdentityUser")) continue;
             
             for(FactProvider prov : factProviders)
