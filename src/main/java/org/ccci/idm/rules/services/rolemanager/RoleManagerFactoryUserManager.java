@@ -9,7 +9,7 @@ public class RoleManagerFactoryUserManager implements RoleManagerFactory
     @Override
     public RoleManagerService construct(String attestorId, String roleBasePath, boolean convertRoleNames)
     {
-        return new RoleManagerServiceUserManager(attestorId);
+        return new RoleManagerServiceUserManager(attestorId, roleBasePath);
     }
 
 }
