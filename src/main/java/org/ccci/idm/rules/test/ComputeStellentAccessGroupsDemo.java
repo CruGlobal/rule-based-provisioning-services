@@ -4,9 +4,12 @@ import org.ccci.idm.rules.services.RoleManagerService;
 import org.ccci.idm.rules.services.RoleManagerServiceUserManager;
 import org.ccci.idm.rules.services.RuleBasedRoleProvisioningService;
 import org.ccci.soa.obj.USEmployment;
+import org.ccci.util.properties.CcciProperties;
+import org.ccci.util.properties.PropertiesWithFallback;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.Properties;
 
 public class ComputeStellentAccessGroupsDemo
 {
@@ -15,11 +18,17 @@ public class ComputeStellentAccessGroupsDemo
         super();
     }
 
+    private Properties properties;
+
     @Test
     public void basicDemo() throws Exception
     {
+        CcciProperties.PropertyEncryptionSetup encryptionSetup = new CcciProperties.PropertyEncryptionSetup("lco97gf5t7D%Y4bh89%U34IF&l*()$Hg6wRD^j4");
+        properties = new PropertiesWithFallback(encryptionSetup, false, "/apps/apps-config/rules.properties", "/ora/apps-config/rules.properties","/rulesDefault.properties");
+
         RoleManagerService roleManagerService =
-                new RoleManagerServiceUserManager("stellent.accessgroup.rules@ccci.org");
+                new RoleManagerServiceUserManager(properties.getProperty("stellent.attestationUser"), properties
+                        .getProperty("stellent.base"));
 
         RuleBasedRoleProvisioningService svc =
                 new RuleBasedRoleProvisioningService(roleManagerService);
