@@ -112,27 +112,22 @@ public class RuleBasedRoleProvisioningService
      */
     public String computeAndApplyRolesForUser(String ssoGuid, Date now, Object... facts) throws Exception
     {
+        logger.debug("compute and apply roles for user " + ssoGuid);
+
         Collection<RoleAssignment> allExistingAssignments = roleManager.findExistingAssignedRoles(ssoGuid);
         Collection<RoleAssignment> externalExistingAssignments = filterExistingRolesKeepExternal(allExistingAssignments);
         Collection<RoleAssignment> newAssignments = computeNewRoleAssignments(ssoGuid, externalExistingAssignments, now, facts);
 
-        logAssignments(allExistingAssignments, "allExistingAssignments ");
-        logAssignments(externalExistingAssignments, "externalExistingAssignments ");
-        logAssignments(newAssignments, "newAssignments ");
+        for(RoleAssignment roleAssignment : allExistingAssignments)
+            logger.debug("all existing assignments for ssoguid " + ssoGuid + roleAssignment.toString());
+        for(RoleAssignment roleAssignment : externalExistingAssignments)
+            logger.debug("external existing assignments for ssoguid " + ssoGuid + roleAssignment.toString());
+        for(RoleAssignment roleAssignment : newAssignments)
+            logger.debug("new assignments for ssoguid " + ssoGuid + roleAssignment.toString());
 
         applyRoleAssignments(newAssignments, allExistingAssignments);
 
         return null;
-    }
-
-    private void logAssignments(Collection<RoleAssignment> roleAssignments, String message)
-    {
-        logger.info(message + roleAssignments.size());
-        for(RoleAssignment roleAssignment : roleAssignments)
-        {
-            logger.info(message + roleAssignment.getAssigneeId() + " to " + roleAssignment.getRoleId() +
-                    " is new? " + !roleAssignment.getExisting());
-        }
     }
 
     private void applyRoleAssignments(Collection<RoleAssignment> newAssignments, Collection<RoleAssignment> allExistingAssignments) throws Exception
@@ -299,7 +294,7 @@ public class RuleBasedRoleProvisioningService
             if (!thisIsAttestor(assignment))
             {
                 externalAssignments.add(assignment);
-                logger.info("detected external assignment: " + assignment.getRoleId() + " assigned by " + assignment
+                logger.debug("detected external assignment: " + assignment.getRoleId() + " assigned by " + assignment
                         .getAttestorId());
             }
         }

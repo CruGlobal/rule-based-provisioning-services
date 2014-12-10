@@ -18,10 +18,13 @@ import org.ccci.idm.rules.services.rolemanager.RoleManagerFactoryUserManager;
 import org.ccci.util.mail.ErrorEmailer;
 import org.ccci.util.properties.CcciProperties.PropertyEncryptionSetup;
 import org.ccci.util.properties.PropertiesWithFallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @WebService()
 public class RuleProvSvc
 {
+    private Logger logger = LoggerFactory.getLogger(getClass());
     private AuthenticationManager authenticationManager;
     private Properties properties;
     private MetaRuleService service;
@@ -37,21 +40,32 @@ public class RuleProvSvc
     @WebMethod(operationName = "runRules")
     public String runRules(@WebParam(name = "serverId") String serverId, @WebParam(name = "serverSecret") String serverSecret, @WebParam(name = "ssoGuid") String ssoGuid, @WebParam(name = "ruleFilter") RuleFilter ruleFilter) throws Throwable
     {
+        logger.debug("web service run rules " + ssoGuid);
+
         authenticationManager.authenticate(new UsernamePasswordCredentials(serverId, serverSecret));
+
+        logger.debug("web service run rules authenticated " + ssoGuid);
 
         service.setupDefaultIfNecessary();
 
+        logger.debug("web service run rules set default " + ssoGuid);
+
         IdentityDAO identityDao = IdentityDaoFactory.getInstance();
+
+        logger.debug("web service run rules got dao " + ssoGuid + " rule filter " +
+                (ruleFilter == null ? ruleFilter :
+                ruleFilter.getRulesets()));
 
         try
         {
             service.runRules(identityDao, ssoGuid, ruleFilter);
+            logger.debug("web service done run rules got dao " + ssoGuid);
             return "done";
         }
         catch(Throwable e)
         {
+            logger.error("web service run rules error " + ssoGuid, e);
             ErrorEmailer.sendErrorToAdmin(properties, e);
-            e.printStackTrace();
             throw e;
         }
         finally
