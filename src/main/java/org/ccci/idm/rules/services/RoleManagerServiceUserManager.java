@@ -1,28 +1,42 @@
 package org.ccci.idm.rules.services;
 
+import com.google.common.collect.ImmutableMap;
 import org.ccci.idm.obj.RoleAssignment;
 import org.ccci.idm.user.Group;
 import org.ccci.idm.user.User;
 import org.ccci.idm.user.UserManager;
 import org.ccci.idm.user.ldaptive.dao.mapper.GroupDnResolver;
+import org.ccci.util.strings.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 
 public class RoleManagerServiceUserManager implements RoleManagerService
 {
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     private String attestorId;
+    private String roleBasePath;
 
     private UserManager userManager;
 
     private GroupDnResolver groupDnResolver;
 
-    public RoleManagerServiceUserManager(String attestorId)
+    private static final Map<String, String> RoleMap = ImmutableMap.of(
+            "roles:StaffOnlyConsumer", "cn=StaffOnlyConsumer,ou=Roles"
+    );
+
+    public RoleManagerServiceUserManager(String attestorId, String roleBasePath)
     {
         super();
 
         this.attestorId = attestorId;
+
+        this.roleBasePath = roleBasePath;
 
         this.userManager = UserManagerService.getUserManager();
 
@@ -34,17 +48,31 @@ public class RoleManagerServiceUserManager implements RoleManagerService
     {
         Collection<RoleAssignment> assignments = new ArrayList<RoleAssignment>();
 
+        logger.info("find existing global id " + globalId);
+
         User user = userManager.findUserByRelayGuid(globalId);
+
+        logger.debug("find existing user " + user);
 
         if(user == null)
         {
             throw new NoSuchUserException("No such user for global id " + globalId);
         }
 
-        if(user.getGroups() != null)
+        logger.debug("user " + user.getEmail());
+        logger.debug("user groups size " + user.getGroups().size());
+
+        for(Group group : user.getGroups())
+        {
+            logger.debug("user groups " + group.getName() + "," + group.getPath());
+        }
+
+		if(user.getGroups() != null)
         {
             for(Group group : user.getGroups())
             {
+                logger.debug("user group " + group.getName());
+
                 RoleAssignment r = new RoleAssignment();
 
                 r.setAssigneeId(globalId);
@@ -52,6 +80,8 @@ public class RoleManagerServiceUserManager implements RoleManagerService
                 r.setExisting(true);
                 r.setRoleId(groupDnResolver.resolve(group));
                 r.setExpiration(new Date());
+
+                logger.debug("role assignment for user " + user.getEmail() + r.toString());
 
                 assignments.add(r);
             }
@@ -63,12 +93,16 @@ public class RoleManagerServiceUserManager implements RoleManagerService
     @Override
     public void assignRoleToPerson(RoleAssignment r) throws Exception
     {
+        logger.debug("role assignment " + r.toString());
+
         User user = userManager.findUserByGuid(r.getAssigneeId());
 
         if(user == null)
         {
             throw new NoSuchUserException("No such user for assignee id " + r.getAssigneeId());
         }
+
+        logger.debug("role assignment " + r.toString() + " for user " + user.getEmail());
 
         Group group = groupDnResolver.resolve(r.getRoleId());
 
@@ -104,9 +138,9 @@ public class RoleManagerServiceUserManager implements RoleManagerService
     }
 
     @Override
-    public String convertRoleNameToFullPath(String name)
+    public String convertRoleNameToFullPath(String roleName)
     {
-        return name;
+        return Strings.isEmpty(roleBasePath) ? RoleMap.get(roleName) : RoleMap.get(roleName) + "," + roleBasePath;
     }
 
     @Override
