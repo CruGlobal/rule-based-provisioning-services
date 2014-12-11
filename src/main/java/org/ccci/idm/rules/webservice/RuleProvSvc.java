@@ -32,7 +32,7 @@ public class RuleProvSvc
 
 	public RuleProvSvc() throws Exception
 	{
-		loadProperties();
+		properties = loadProperties();
         setupAuthenticationManager();
         service = new MetaRuleService(properties, new RoleManagerFactoryUserManager());
 	}
@@ -75,10 +75,11 @@ public class RuleProvSvc
     }
     
     
-    private void loadProperties()
+    public static Properties loadProperties()
     {
         PropertyEncryptionSetup encryptionSetup = new PropertyEncryptionSetup("lco97gf5t7D%Y4bh89%U34IF&l*()$Hg6wRD^j4");
-        properties = new PropertiesWithFallback(encryptionSetup, false, "/apps/apps-config/rules.properties", "/ora/apps-config/rules.properties","/rulesDefault.properties");
+        return new PropertiesWithFallback(encryptionSetup, false, "/apps/apps-config/rules.properties",
+                "/ora/apps-config/rules.properties","/rulesDefault.properties");
     }
 
     private void setupAuthenticationManager()
