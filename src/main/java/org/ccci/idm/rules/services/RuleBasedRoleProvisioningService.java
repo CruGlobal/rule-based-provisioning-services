@@ -146,11 +146,13 @@ public class RuleBasedRoleProvisioningService
             }
             if (found==null)
             {
+                logger.debug("role assignment : role not found");
                 roleManager.assignRoleToPerson(newOne);
             }
             else if(!thisIsAttestor(found) && thisIsAttestor(newOne))
             {
                 // it now matches the rules, so let's replace to claim attestation
+                logger.debug("role assignment : role found but replacing with new attestation");
                 roleManager.removeRoleFromPerson(newOne);
                 // need to make sure that timestamps show a difference between removal and addition, so changelog sorting happens properly!!!
                 synchronized(this) {this.wait(1100);}
@@ -158,7 +160,12 @@ public class RuleBasedRoleProvisioningService
             }
             else if(!NkUtil.equal(found.getExpiration(),newOne.getExpiration()))
             {
+                logger.debug("role assignment : role found but updating role expiration");
                 roleManager.updateRoleExpiration(newOne);
+            }
+            else
+            {
+                logger.debug("role assignment : role found but not doing anything");
             }
         }
 
@@ -176,6 +183,7 @@ public class RuleBasedRoleProvisioningService
             }
             if (!found)
             {
+                logger.debug("role removal : role not found so removing");
                 roleManager.removeRoleFromPerson(r2);
             }
         }

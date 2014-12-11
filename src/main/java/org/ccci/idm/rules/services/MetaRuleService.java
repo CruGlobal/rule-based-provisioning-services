@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.ccci.idm.dao.IdentityDAO;
 import org.ccci.idm.obj.IdentityUser;
+import org.ccci.idm.rules.obj.EmployeeInfo;
 import org.ccci.idm.rules.services.factprovider.EmployeeInfoProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,7 +138,14 @@ public class MetaRuleService
             {
                 if(prov.getFactName().equals(fact))
                 {
-                    facts.add(prov.getFact(identityUser));
+                    Object provFact = prov.getFact(identityUser);
+                    if(provFact instanceof EmployeeInfo)
+                    {
+                        EmployeeInfo employeeInfo = (EmployeeInfo) provFact;
+                        logger.debug("employee info is " + employeeInfo.getEmployed() + "," + employeeInfo
+                                .getEmplStatus());
+                    }
+                    facts.add(provFact);
                     break;
                 }
             }
