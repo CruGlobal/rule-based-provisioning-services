@@ -5,7 +5,7 @@ import org.ccci.idm.obj.RoleAssignment;
 import org.ccci.idm.user.Group;
 import org.ccci.idm.user.User;
 import org.ccci.idm.user.UserManager;
-import org.ccci.idm.user.ldaptive.dao.mapper.GroupDnResolver;
+import org.ccci.idm.user.ldaptive.dao.io.GroupValueTranscoder;
 import org.ccci.util.strings.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class RoleManagerServiceUserManager implements RoleManagerService
 
     private UserManager userManager;
 
-    private GroupDnResolver groupDnResolver;
+    private GroupValueTranscoder groupValueTranscoder;
 
     private static final Map<String, String> RoleMap = ImmutableMap.of(
             "roles:StaffOnlyConsumer", "cn=StaffOnlyConsumer,ou=Roles"
@@ -40,7 +40,7 @@ public class RoleManagerServiceUserManager implements RoleManagerService
 
         this.userManager = UserManagerService.getUserManager();
 
-        this.groupDnResolver = UserManagerService.getGroupDnResolver();
+        this.groupValueTranscoder = UserManagerService.getGroupValueTranscoder();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class RoleManagerServiceUserManager implements RoleManagerService
                 r.setAssigneeId(globalId);
                 r.setAttestorId(attestorId);
                 r.setExisting(true);
-                r.setRoleId(groupDnResolver.resolve(group));
+                r.setRoleId(groupValueTranscoder.encodeStringValue(group));
                 r.setExpiration(new Date());
 
                 logger.debug("role assignment for user " + user.getEmail() + r.toString());
@@ -104,7 +104,7 @@ public class RoleManagerServiceUserManager implements RoleManagerService
 
         logger.debug("role assignment " + r.toString() + " for user " + user.getEmail());
 
-        Group group = groupDnResolver.resolve(r.getRoleId());
+        Group group = groupValueTranscoder.decodeStringValue(r.getRoleId());
 
         if(group == null)
         {
@@ -120,7 +120,7 @@ public class RoleManagerServiceUserManager implements RoleManagerService
     {
         User user = userManager.findUserByGuid(r.getAssigneeId());
 
-        Group group = groupDnResolver.resolve(r.getRoleId());
+        Group group = groupValueTranscoder.decodeStringValue(r.getRoleId());
 
         userManager.removeFromGroup(user, group);
     }
