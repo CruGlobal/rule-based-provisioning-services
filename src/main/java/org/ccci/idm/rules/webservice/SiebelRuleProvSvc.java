@@ -14,7 +14,7 @@ import org.ccci.idm.authentication.credentials.impl.UsernamePasswordCredentials;
 import org.ccci.idm.authentication.handler.impl.PropertyBasedUsernamePasswordAuthHandler;
 import org.ccci.idm.authentication.manager.AuthenticationManager;
 import org.ccci.idm.authentication.manager.impl.AuthenticationManagerImpl;
-import org.ccci.idm.rules.services.RoleManagerServiceGrouper;
+import org.ccci.idm.rules.services.RoleManagerServiceUserManager;
 import org.ccci.idm.rules.services.RuleBasedRoleProvisioningService;
 import org.ccci.soa.pshr.client.StaffService;
 import org.ccci.soa.pshr.client.StaffServiceService;
@@ -102,11 +102,11 @@ public class SiebelRuleProvSvc
 
     private void setupRules()
     {
-        ruleBasedResponsibilityProvisioningService = new RuleBasedRoleProvisioningService(new RoleManagerServiceGrouper("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel:resp", true));
+        ruleBasedResponsibilityProvisioningService = new RuleBasedRoleProvisioningService(new RoleManagerServiceUserManager("siebel.responsibility.rules@ccci.org", "ccci:itroles:uscore:siebel:resp"));
         ruleBasedResponsibilityProvisioningService.addExcelRuleset("classpath:SiebelResponsibilityProvisioningRules.xls", "Sheet1");
         ruleBasedResponsibilityProvisioningService.addDrlRuleset("classpath:RemoveAllRoles.drl");
 
-        ruleBasedAccessGroupProvisioningService = new RuleBasedRoleProvisioningService(new RoleManagerServiceGrouper("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel:access_groups", true));
+        ruleBasedAccessGroupProvisioningService = new RuleBasedRoleProvisioningService(new RoleManagerServiceUserManager("siebel.accessgroup.rules@ccci.org", "ccci:itroles:uscore:siebel:access_groups"));
         ruleBasedAccessGroupProvisioningService.addExcelRuleset("classpath:SiebelAccessGroupProvisioningRules.xls", "Sheet1");
         ruleBasedAccessGroupProvisioningService.addDrlRuleset("classpath:RemoveAllRoles.drl");
     }

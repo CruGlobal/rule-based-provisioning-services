@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.ccci.idm.obj.RoleAssignment;
 
 /**
- * A Role Manager Service wraps a particular role management system, such as Grouper.
+ * A Role Manager Service wraps a particular role management system, such as UserManager.
  * This allows querying for existing role assignments as well as granting and revoking
  * new role assignments.
  * 

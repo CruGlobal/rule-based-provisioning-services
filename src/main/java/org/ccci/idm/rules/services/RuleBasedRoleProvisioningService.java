@@ -52,9 +52,9 @@ import org.slf4j.LoggerFactory;
  *         and if the ruleset does NOT assert it or revoke it...
  *             then it will be left unchanged.
  *         and if the ruleset DOES assert it...
- *             then this ruleset will "take over" attestation (i.e. the next time you look at this assignment, it will look like the ruleset is responsible for the assignment).  This is done by removing and re-adding the person to the group in Grouper.
+ *             then this ruleset will "take over" attestation (i.e. the next time you look at this assignment, it will look like the ruleset is responsible for the assignment).  This is done by removing and re-adding the person to the group.
  *         and if the ruleset DOES revoke it...
- *             then the assignment will be removed (i.e. the person will be removed from the group in Grouper).
+ *             then the assignment will be removed (i.e. the person will be removed from the group).
  * 
  * In other words,
  * 

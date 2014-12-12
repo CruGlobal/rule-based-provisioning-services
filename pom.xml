@@ -36,12 +36,6 @@
 
 		<dependency>
 			<groupId>org.ccci</groupId>
-			<artifactId>grouper-api</artifactId>
-			<version>1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.ccci</groupId>
 			<artifactId>identity-core</artifactId>
 			<version>1-SNAPSHOT</version>
 		</dependency>
