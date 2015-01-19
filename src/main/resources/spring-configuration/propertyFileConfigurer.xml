@@ -8,7 +8,6 @@
         <property name="ignoreResourceNotFound" value="true"/>
         <property name="locations">
             <list>
-                <value>/spring-configuration/user-manager.xml</value>
                 <value>file:/apps/apps-config/rules.properties</value>
             </list>
         </property>
