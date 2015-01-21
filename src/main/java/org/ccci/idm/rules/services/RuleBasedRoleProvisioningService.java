@@ -149,14 +149,13 @@ public class RuleBasedRoleProvisioningService
                 logger.debug("role assignment : role not found");
                 roleManager.assignRoleToPerson(newOne);
             }
+            /*
+             This condition should never be true, as attestor should be identical for all role assignments.
+             It is not derived from the stored role but simply as a property value now associated with any assignment.
+             */
             else if(!thisIsAttestor(found) && thisIsAttestor(newOne))
             {
-                // it now matches the rules, so let's replace to claim attestation
-                logger.debug("role assignment : role found but replacing with new attestation");
-                roleManager.removeRoleFromPerson(newOne);
-                // need to make sure that timestamps show a difference between removal and addition, so changelog sorting happens properly!!!
-                synchronized(this) {this.wait(1100);}
-                roleManager.assignRoleToPerson(newOne);
+                // since we no longer support attestation, do nothing here
             }
             else if(!NkUtil.equal(found.getExpiration(),newOne.getExpiration()))
             {
