@@ -51,9 +51,4 @@ public class MockIdentityDAO implements IdentityDAO
         user.getDesignation().setDesignationId("0123456");
         return user;
     }
-
-    @Override public void updateEmailVerified(IdentityUser identityUser) throws Exception
-    {
-        throw new RuntimeException("Not yet supported");
-    }
 }
