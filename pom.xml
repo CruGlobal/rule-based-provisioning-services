@@ -188,6 +188,17 @@
 			<version>18.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4jVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4jVersion}</version>
+		</dependency>
+
 	</dependencies>
 
 
@@ -239,6 +250,7 @@
 	<properties>
 		<project.build.sourceEncoding>cp1252</project.build.sourceEncoding>
         <spring.version>4.1.2.RELEASE</spring.version>
+		<slf4jVersion>1.7.10</slf4jVersion>
     </properties>
 
 </project>
