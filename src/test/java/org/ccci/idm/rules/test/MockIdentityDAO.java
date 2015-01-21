@@ -8,6 +8,10 @@ import org.ccci.idm.obj.IdentityUser;
 public class MockIdentityDAO implements IdentityDAO
 {
 
+    @Override public void updateEmailVerified(IdentityUser identityUser) throws Exception
+    {
+    }
+
     @Override
     public boolean save(IdentityUser identityUser) throws Exception
     {
