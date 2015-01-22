@@ -76,10 +76,11 @@ public class RoleManagerServiceUserManager implements RoleManagerService
                 RoleAssignment r = new RoleAssignment();
 
                 r.setAssigneeId(globalId);
-                r.setAttestorId(attestorId);
                 r.setExisting(true);
                 r.setRoleId(groupValueTranscoder.encodeStringValue(group));
                 r.setExpiration(new Date());
+
+                setAttestor(r);
 
                 logger.debug("role assignment for user " + user.getEmail() + r.toString());
 
@@ -88,6 +89,21 @@ public class RoleManagerServiceUserManager implements RoleManagerService
         }
 
         return assignments;
+    }
+
+    private void setAttestor(RoleAssignment r)
+    {
+        r.setAttestorId("externalAttestor");
+
+        // set ourselves as attestor if the role is one we manage
+        for (Map.Entry<String, String> entry : RoleMap.entrySet())
+        {
+            if(r.getRoleId().startsWith(entry.getValue()))
+            {
+                r.setAttestorId(attestorId);
+                break;
+            }
+        }
     }
 
     @Override
@@ -121,6 +137,8 @@ public class RoleManagerServiceUserManager implements RoleManagerService
         User user = userManager.findUserByGuid(r.getAssigneeId());
 
         Group group = groupValueTranscoder.decodeStringValue(r.getRoleId());
+
+        logger.info("Removing role from user " + user.getEmail() + " for group " + group.getName());
 
         userManager.removeFromGroup(user, group);
     }
