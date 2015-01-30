@@ -60,15 +60,11 @@ public class RoleManagerServiceUserManager implements RoleManagerService
         }
 
         logger.debug("user " + user.getEmail());
-        logger.debug("user groups size " + user.getGroups().size());
-
-        for(Group group : user.getGroups())
-        {
-            logger.debug("user groups " + group.getName() + "," + group.getPath());
-        }
 
         if(user.getGroups() != null)
         {
+            logger.debug("user groups size " + user.getGroups().size());
+
             for(Group group : user.getGroups())
             {
                 logger.debug("user group " + group.getName());
