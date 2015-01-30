@@ -67,7 +67,7 @@ public class RoleManagerServiceUserManager implements RoleManagerService
             logger.debug("user groups " + group.getName() + "," + group.getPath());
         }
 
-		if(user.getGroups() != null)
+        if(user.getGroups() != null)
         {
             for(Group group : user.getGroups())
             {
