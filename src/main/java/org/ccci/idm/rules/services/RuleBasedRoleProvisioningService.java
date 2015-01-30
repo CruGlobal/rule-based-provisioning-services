@@ -119,11 +119,19 @@ public class RuleBasedRoleProvisioningService
         Collection<RoleAssignment> newAssignments = computeNewRoleAssignments(ssoGuid, externalExistingAssignments, now, facts);
 
         for(RoleAssignment roleAssignment : allExistingAssignments)
+        {
             logger.debug("all existing assignments for ssoguid " + ssoGuid + roleAssignment.toString());
+        }
+
         for(RoleAssignment roleAssignment : externalExistingAssignments)
+        {
             logger.debug("external existing assignments for ssoguid " + ssoGuid + roleAssignment.toString());
+        }
+
         for(RoleAssignment roleAssignment : newAssignments)
+        {
             logger.debug("new assignments for ssoguid " + ssoGuid + roleAssignment.toString());
+        }
 
         applyRoleAssignments(newAssignments, allExistingAssignments);
 
