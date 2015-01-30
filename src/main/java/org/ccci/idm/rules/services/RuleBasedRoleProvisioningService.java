@@ -154,7 +154,7 @@ public class RuleBasedRoleProvisioningService
             }
             if (found==null)
             {
-                logger.debug("role assignment : role not found");
+                logger.info("role assignment : assigning role " + newOne.toString());
                 roleManager.assignRoleToPerson(newOne);
             }
             /*
@@ -190,7 +190,7 @@ public class RuleBasedRoleProvisioningService
             }
             if (!found)
             {
-                logger.debug("role removal : role not found so removing");
+                logger.info("role removal : role not found so removing");
                 roleManager.removeRoleFromPerson(r2);
             }
         }
