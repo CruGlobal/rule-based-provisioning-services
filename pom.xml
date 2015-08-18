@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>org.ccci</groupId>
 			<artifactId>identity-core</artifactId>
-			<version>1-SNAPSHOT</version>
+			<version>3.0</version>
 		</dependency>
 <!--
 		<dependency>
