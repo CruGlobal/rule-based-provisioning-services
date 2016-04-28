@@ -107,7 +107,7 @@ public class RoleManagerServiceUserManager implements RoleManagerService
     {
         logger.debug("role assignment " + r.toString());
 
-        User user = userManager.findUserByGuid(r.getAssigneeId());
+        User user = userManager.findUserByRelayGuid(r.getAssigneeId());
 
         if(user == null)
         {
@@ -130,7 +130,7 @@ public class RoleManagerServiceUserManager implements RoleManagerService
     @Override
     public void removeRoleFromPerson(RoleAssignment r) throws Exception
     {
-        User user = userManager.findUserByGuid(r.getAssigneeId());
+        User user = userManager.findUserByRelayGuid(r.getAssigneeId());
 
         Group group = groupValueTranscoder.decodeStringValue(r.getRoleId());
 
